@@ -28,8 +28,6 @@ from paddle.nn import AdaptiveAvgPool2D, BatchNorm, Conv2D, Linear, MaxPool2D
 from paddle.nn.initializer import Uniform
 from paddle.utils.download import get_weights_path_from_url
 
-__all__ = []
-
 model_urls = {
     "ResNeXt50_32x4d": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNeXt50_32x4d_pretrained.pdparams",

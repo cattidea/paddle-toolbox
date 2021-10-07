@@ -25,28 +25,22 @@ from paddle.nn.initializer import Uniform
 from paddle.fluid.param_attr import ParamAttr
 from paddle.utils.download import get_weights_path_from_url
 
-__all__ = []
-
 model_urls = {
     "googlenet": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/GoogLeNet_pretrained.pdparams",
-        "80c06f038e905c53ab32c40eca6e26ae", )
+        "80c06f038e905c53ab32c40eca6e26ae",
+    )
 }
 
 
 def xavier(channels, filter_size):
-    stdv = (3.0 / (filter_size**2 * channels))**0.5
+    stdv = (3.0 / (filter_size ** 2 * channels)) ** 0.5
     param_attr = ParamAttr(initializer=Uniform(-stdv, stdv))
     return param_attr
 
 
 class ConvLayer(nn.Layer):
-    def __init__(self,
-                 num_channels,
-                 num_filters,
-                 filter_size,
-                 stride=1,
-                 groups=1):
+    def __init__(self, num_channels, num_filters, filter_size, stride=1, groups=1):
         super(ConvLayer, self).__init__()
 
         self._conv = Conv2D(
@@ -56,7 +50,8 @@ class ConvLayer(nn.Layer):
             stride=stride,
             padding=(filter_size - 1) // 2,
             groups=groups,
-            bias_attr=False)
+            bias_attr=False,
+        )
 
     def forward(self, inputs):
         y = self._conv(inputs)
@@ -64,8 +59,7 @@ class ConvLayer(nn.Layer):
 
 
 class Inception(nn.Layer):
-    def __init__(self, input_channels, output_channels, filter1, filter3R,
-                 filter3, filter5R, filter5, proj):
+    def __init__(self, input_channels, output_channels, filter1, filter3R, filter3, filter5R, filter5, proj):
         super(Inception, self).__init__()
 
         self._conv1 = ConvLayer(input_channels, filter1, 1)
@@ -97,9 +91,9 @@ class Inception(nn.Layer):
 class GoogLeNet(nn.Layer):
     """GoogLeNet (Inception v1) model architecture from
     `"Going Deeper with Convolutions" <https://arxiv.org/pdf/1409.4842.pdf>`_
-    
+
     Args:
-        num_classes (int): output dim of last fc layer. If num_classes <=0, last fc layer 
+        num_classes (int): output dim of last fc layer. If num_classes <=0, last fc layer
                             will not be defined. Default: 1000.
 
     Examples:
@@ -191,7 +185,7 @@ class GoogLeNet(nn.Layer):
 def googlenet(pretrained=False, **kwargs):
     """GoogLeNet (Inception v1) model architecture from
     `"Going Deeper with Convolutions" <https://arxiv.org/pdf/1409.4842.pdf>`_
-    
+
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
 
@@ -211,10 +205,8 @@ def googlenet(pretrained=False, **kwargs):
     if pretrained:
         assert (
             arch in model_urls
-        ), "{} model do not have a pretrained model now, you should set pretrained=False".format(
-            arch)
-        weight_path = get_weights_path_from_url(model_urls[arch][0],
-                                                model_urls[arch][1])
+        ), "{} model do not have a pretrained model now, you should set pretrained=False".format(arch)
+        weight_path = get_weights_path_from_url(model_urls[arch][0], model_urls[arch][1])
 
         param = paddle.load(weight_path)
         model.set_dict(param)

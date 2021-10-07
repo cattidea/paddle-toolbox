@@ -23,30 +23,35 @@ from paddle.fluid.layers import reshape, transpose, concat, split
 from paddle.fluid.param_attr import ParamAttr
 from paddle.utils.download import get_weights_path_from_url
 
-__all__ = []
-
 model_urls = {
     "shufflenet_v2_x0_25": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ShuffleNetV2_x0_25_pretrained.pdparams",
-        "e753404cbd95027759c5f56ecd6c9c4b", ),
+        "e753404cbd95027759c5f56ecd6c9c4b",
+    ),
     "shufflenet_v2_x0_33": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ShuffleNetV2_x0_33_pretrained.pdparams",
-        "776e3cf9a4923abdfce789c45b8fe1f2", ),
+        "776e3cf9a4923abdfce789c45b8fe1f2",
+    ),
     "shufflenet_v2_x0_5": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ShuffleNetV2_x0_5_pretrained.pdparams",
-        "e3649cf531566917e2969487d2bc6b60", ),
+        "e3649cf531566917e2969487d2bc6b60",
+    ),
     "shufflenet_v2_x1_0": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ShuffleNetV2_x1_0_pretrained.pdparams",
-        "7821c348ea34e58847c43a08a4ac0bdf", ),
+        "7821c348ea34e58847c43a08a4ac0bdf",
+    ),
     "shufflenet_v2_x1_5": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ShuffleNetV2_x1_5_pretrained.pdparams",
-        "93a07fa557ab2d8803550f39e5b6c391", ),
+        "93a07fa557ab2d8803550f39e5b6c391",
+    ),
     "shufflenet_v2_x2_0": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ShuffleNetV2_x2_0_pretrained.pdparams",
-        "4ab1f622fd0d341e0f84b4e057797563", ),
+        "4ab1f622fd0d341e0f84b4e057797563",
+    ),
     "shufflenet_v2_swish": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ShuffleNetV2_swish_pretrained.pdparams",
-        "daff38b3df1b3748fccbb13cfdf02519", ),
+        "daff38b3df1b3748fccbb13cfdf02519",
+    ),
 }
 
 
@@ -55,8 +60,7 @@ def channel_shuffle(x, groups):
     channels_per_group = num_channels // groups
 
     # reshape
-    x = reshape(
-        x=x, shape=[batch_size, groups, channels_per_group, height, width])
+    x = reshape(x=x, shape=[batch_size, groups, channels_per_group, height, width])
 
     # transpose
     x = transpose(x=x, perm=[0, 2, 1, 3, 4])
@@ -67,14 +71,7 @@ def channel_shuffle(x, groups):
 
 
 class ConvBNLayer(Layer):
-    def __init__(self,
-                 in_channels,
-                 out_channels,
-                 kernel_size,
-                 stride,
-                 padding,
-                 groups=1,
-                 act=None):
+    def __init__(self, in_channels, out_channels, kernel_size, stride, padding, groups=1, act=None):
         super(ConvBNLayer, self).__init__()
         self._conv = Conv2D(
             in_channels=in_channels,
@@ -84,7 +81,8 @@ class ConvBNLayer(Layer):
             padding=padding,
             groups=groups,
             weight_attr=ParamAttr(initializer=KaimingNormal()),
-            bias_attr=False, )
+            bias_attr=False,
+        )
 
         self._batch_norm = BatchNorm(out_channels, act=act)
 
@@ -104,7 +102,8 @@ class InvertedResidual(Layer):
             stride=1,
             padding=0,
             groups=1,
-            act=act)
+            act=act,
+        )
         self._conv_dw = ConvBNLayer(
             in_channels=out_channels // 2,
             out_channels=out_channels // 2,
@@ -112,7 +111,8 @@ class InvertedResidual(Layer):
             stride=stride,
             padding=1,
             groups=out_channels // 2,
-            act=None)
+            act=None,
+        )
         self._conv_linear = ConvBNLayer(
             in_channels=out_channels // 2,
             out_channels=out_channels // 2,
@@ -120,13 +120,11 @@ class InvertedResidual(Layer):
             stride=1,
             padding=0,
             groups=1,
-            act=act)
+            act=act,
+        )
 
     def forward(self, inputs):
-        x1, x2 = split(
-            inputs,
-            num_or_sections=[inputs.shape[1] // 2, inputs.shape[1] // 2],
-            dim=1)
+        x1, x2 = split(inputs, num_or_sections=[inputs.shape[1] // 2, inputs.shape[1] // 2], dim=1)
         x2 = self._conv_pw(x2)
         x2 = self._conv_dw(x2)
         x2 = self._conv_linear(x2)
@@ -146,7 +144,8 @@ class InvertedResidualDS(Layer):
             stride=stride,
             padding=1,
             groups=in_channels,
-            act=None)
+            act=None,
+        )
         self._conv_linear_1 = ConvBNLayer(
             in_channels=in_channels,
             out_channels=out_channels // 2,
@@ -154,7 +153,8 @@ class InvertedResidualDS(Layer):
             stride=1,
             padding=0,
             groups=1,
-            act=act)
+            act=act,
+        )
         # branch2
         self._conv_pw_2 = ConvBNLayer(
             in_channels=in_channels,
@@ -163,7 +163,8 @@ class InvertedResidualDS(Layer):
             stride=1,
             padding=0,
             groups=1,
-            act=act)
+            act=act,
+        )
         self._conv_dw_2 = ConvBNLayer(
             in_channels=out_channels // 2,
             out_channels=out_channels // 2,
@@ -171,7 +172,8 @@ class InvertedResidualDS(Layer):
             stride=stride,
             padding=1,
             groups=out_channels // 2,
-            act=None)
+            act=None,
+        )
         self._conv_linear_2 = ConvBNLayer(
             in_channels=out_channels // 2,
             out_channels=out_channels // 2,
@@ -179,7 +181,8 @@ class InvertedResidualDS(Layer):
             stride=1,
             padding=0,
             groups=1,
-            act=act)
+            act=act,
+        )
 
     def forward(self, inputs):
         x1 = self._conv_dw_1(inputs)
@@ -231,16 +234,11 @@ class ShuffleNetV2(Layer):
         elif scale == 2.0:
             stage_out_channels = [-1, 24, 224, 488, 976, 2048]
         else:
-            raise NotImplementedError("This scale size:[" + str(scale) +
-                                      "] is not implemented!")
+            raise NotImplementedError("This scale size:[" + str(scale) + "] is not implemented!")
         # 1. conv1
         self._conv1 = ConvBNLayer(
-            in_channels=3,
-            out_channels=stage_out_channels[1],
-            kernel_size=3,
-            stride=2,
-            padding=1,
-            act=act)
+            in_channels=3, out_channels=stage_out_channels[1], kernel_size=3, stride=2, padding=1, act=act
+        )
         self._max_pool = MaxPool2D(kernel_size=3, stride=2, padding=1)
 
         # 2. bottleneck sequences
@@ -253,16 +251,20 @@ class ShuffleNetV2(Layer):
                             in_channels=stage_out_channels[stage_id + 1],
                             out_channels=stage_out_channels[stage_id + 2],
                             stride=2,
-                            act=act),
-                        name=str(stage_id + 2) + "_" + str(i + 1))
+                            act=act,
+                        ),
+                        name=str(stage_id + 2) + "_" + str(i + 1),
+                    )
                 else:
                     block = self.add_sublayer(
                         sublayer=InvertedResidual(
                             in_channels=stage_out_channels[stage_id + 2],
                             out_channels=stage_out_channels[stage_id + 2],
                             stride=1,
-                            act=act),
-                        name=str(stage_id + 2) + "_" + str(i + 1))
+                            act=act,
+                        ),
+                        name=str(stage_id + 2) + "_" + str(i + 1),
+                    )
                 self._block_list.append(block)
         # 3. last_conv
         self._last_conv = ConvBNLayer(
@@ -271,7 +273,8 @@ class ShuffleNetV2(Layer):
             kernel_size=1,
             stride=1,
             padding=0,
-            act=act)
+            act=act,
+        )
         # 4. pool
         self._pool2d_avg = AdaptiveAvgPool2D(1)
         self._out_c = stage_out_channels[-1]
@@ -295,10 +298,8 @@ def _shufflenet_v2(arch, pretrained=False, **kwargs):
     if pretrained:
         assert (
             arch in model_urls
-        ), "{} model do not have a pretrained model now, you should set pretrained=False".format(
-            arch)
-        weight_path = get_weights_path_from_url(model_urls[arch][0],
-                                                model_urls[arch][1])
+        ), "{} model do not have a pretrained model now, you should set pretrained=False".format(arch)
+        weight_path = get_weights_path_from_url(model_urls[arch][0], model_urls[arch][1])
 
         param = paddle.load(weight_path)
         model.set_dict(param)
@@ -325,8 +326,7 @@ def shufflenet_v2_x0_25(pretrained=False, **kwargs):
             # model = shufflenet_v2_x0_25(pretrained=True)
 
     """
-    return _shufflenet_v2(
-        "shufflenet_v2_x0_25", scale=0.25, pretrained=pretrained, **kwargs)
+    return _shufflenet_v2("shufflenet_v2_x0_25", scale=0.25, pretrained=pretrained, **kwargs)
 
 
 def shufflenet_v2_x0_33(pretrained=False, **kwargs):
@@ -348,8 +348,7 @@ def shufflenet_v2_x0_33(pretrained=False, **kwargs):
             # model = shufflenet_v2_x0_33(pretrained=True)
 
     """
-    return _shufflenet_v2(
-        "shufflenet_v2_x0_33", scale=0.33, pretrained=pretrained, **kwargs)
+    return _shufflenet_v2("shufflenet_v2_x0_33", scale=0.33, pretrained=pretrained, **kwargs)
 
 
 def shufflenet_v2_x0_5(pretrained=False, **kwargs):
@@ -371,8 +370,7 @@ def shufflenet_v2_x0_5(pretrained=False, **kwargs):
             # model = shufflenet_v2_x0_5(pretrained=True)
 
     """
-    return _shufflenet_v2(
-        "shufflenet_v2_x0_5", scale=0.5, pretrained=pretrained, **kwargs)
+    return _shufflenet_v2("shufflenet_v2_x0_5", scale=0.5, pretrained=pretrained, **kwargs)
 
 
 def shufflenet_v2_x1_0(pretrained=False, **kwargs):
@@ -394,8 +392,7 @@ def shufflenet_v2_x1_0(pretrained=False, **kwargs):
             # model = shufflenet_v2_x1_0(pretrained=True)
 
     """
-    return _shufflenet_v2(
-        "shufflenet_v2_x1_0", scale=1.0, pretrained=pretrained, **kwargs)
+    return _shufflenet_v2("shufflenet_v2_x1_0", scale=1.0, pretrained=pretrained, **kwargs)
 
 
 def shufflenet_v2_x1_5(pretrained=False, **kwargs):
@@ -417,8 +414,7 @@ def shufflenet_v2_x1_5(pretrained=False, **kwargs):
             # model = shufflenet_v2_x1_5(pretrained=True)
 
     """
-    return _shufflenet_v2(
-        "shufflenet_v2_x1_5", scale=1.5, pretrained=pretrained, **kwargs)
+    return _shufflenet_v2("shufflenet_v2_x1_5", scale=1.5, pretrained=pretrained, **kwargs)
 
 
 def shufflenet_v2_x2_0(pretrained=False, **kwargs):
@@ -440,8 +436,7 @@ def shufflenet_v2_x2_0(pretrained=False, **kwargs):
             # model = shufflenet_v2_x2_0(pretrained=True)
 
     """
-    return _shufflenet_v2(
-        "shufflenet_v2_x2_0", scale=2.0, pretrained=pretrained, **kwargs)
+    return _shufflenet_v2("shufflenet_v2_x2_0", scale=2.0, pretrained=pretrained, **kwargs)
 
 
 def shufflenet_v2_swish(pretrained=False, **kwargs):
@@ -463,9 +458,4 @@ def shufflenet_v2_swish(pretrained=False, **kwargs):
             # model = shufflenet_v2_swish(pretrained=True)
 
     """
-    return _shufflenet_v2(
-        "shufflenet_v2_swish",
-        scale=1.0,
-        act="swish",
-        pretrained=pretrained,
-        **kwargs)
+    return _shufflenet_v2("shufflenet_v2_swish", scale=1.0, act="swish", pretrained=pretrained, **kwargs)
