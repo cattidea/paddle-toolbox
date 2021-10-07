@@ -114,9 +114,9 @@ for X_batch, y_batch in train_loader():
 
 ```python
 import paddle
-from pptb.vision.models import resnext50_32x4d
+import pptb.vision.models as ppmodels
 
-model = resnext50_32x4d(pretrained=True)
+model = ppmodels.resnext50_32x4d(pretrained=True)
 ```
 
 PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很多比较新的模型的 [ppim](https://github.com/AgentMaker/Paddle-Image-Models)~

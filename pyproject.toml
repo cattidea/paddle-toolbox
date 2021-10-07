@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pptb"
-version = "0.1.2"
+version = "0.1.3"
 description = "🚣 一些常用的但 paddle 里没有的小工具～"
 authors = ["Nyakku Shigure <sigure.qaq@gmail.com>"]
 keywords = ["python", "paddle", "toolbox"]
