@@ -6,11 +6,15 @@ authors = ["Nyakku Shigure <sigure.qaq@gmail.com>"]
 keywords = ["python", "paddle", "toolbox"]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.7"
+paddlepaddle = { version = "^2.1.2", optional = true }
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 black = "^21.9b0"
+
+[tool.poetry.extras]
+paddle = ["paddlepaddle"]
 
 [tool.black]
 line-length = 120

@@ -119,3 +119,6 @@ dmypy.json
 
 # test files
 *.test.py
+
+# Jupyter Notebook
+*.ipynb
