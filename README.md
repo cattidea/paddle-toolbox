@@ -100,6 +100,27 @@ for X_batch, y_batch in train_loader():
    # ...
 ```
 
+### 各种模型
+
+已支持一些 PaddleClas 下的预训练模型
+
+日后如果合入 paddle，这些模型会删除
+
+-  GoogLeNet
+-  Incetpionv3
+-  ResNeXt
+-  ShuffleNetV2
+-  DenseNet (未完整支持)
+
+```python
+import paddle
+from pptb.vision.models import resnext50_32x4d
+
+model = resnext50_32x4d(pretrained=True)
+```
+
+PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很多比较新的模型的 [ppim](https://github.com/AgentMaker/Paddle-Image-Models)~
+
 ## References
 
 -  [PaddlePaddle](https://github.com/PaddlePaddle/Paddle)
