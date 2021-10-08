@@ -25,6 +25,8 @@ from paddle.nn.initializer import Uniform
 from paddle.fluid.param_attr import ParamAttr
 from paddle.utils.download import get_weights_path_from_url
 
+__all__ = []
+
 model_urls = {
     "googlenet": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/GoogLeNet_pretrained.pdparams",
@@ -95,6 +97,7 @@ class GoogLeNet(nn.Layer):
     Args:
         num_classes (int): output dim of last fc layer. If num_classes <=0, last fc layer
                             will not be defined. Default: 1000.
+        with_pool (bool, optional): use pool before the last fc layer or not. Default: True.
 
     Examples:
         .. code-block:: python
@@ -105,8 +108,11 @@ class GoogLeNet(nn.Layer):
             model = GoogLeNet()
     """
 
-    def __init__(self, num_classes=1000):
+    def __init__(self, num_classes=1000, with_pool=True):
         super(GoogLeNet, self).__init__()
+        self.num_classes = num_classes
+        self.with_pool = with_pool
+
         self._conv = ConvLayer(3, 64, 7, 2)
         self._pool = MaxPool2D(kernel_size=3, stride=2)
         self._conv_1 = ConvLayer(64, 64, 1)
@@ -124,20 +130,30 @@ class GoogLeNet(nn.Layer):
         self._ince5a = Inception(832, 832, 256, 160, 320, 32, 128, 128)
         self._ince5b = Inception(832, 832, 384, 192, 384, 48, 128, 128)
 
-        self._pool_5 = AdaptiveAvgPool2D(1)
+        if with_pool:
+            # out
+            self._pool_5 = AdaptiveAvgPool2D(1)
+            # out1
+            self._pool_o1 = AvgPool2D(kernel_size=5, stride=3)
+            # out2
+            self._pool_o2 = AvgPool2D(kernel_size=5, stride=3)
 
-        self._drop = Dropout(p=0.4, mode="downscale_in_infer")
-        self._fc_out = Linear(1024, num_classes, weight_attr=xavier(1024, 1))
-        self._pool_o1 = AvgPool2D(kernel_size=5, stride=3)
-        self._conv_o1 = ConvLayer(512, 128, 1)
-        self._fc_o1 = Linear(1152, 1024, weight_attr=xavier(2048, 1))
-        self._drop_o1 = Dropout(p=0.7, mode="downscale_in_infer")
-        self._out1 = Linear(1024, num_classes, weight_attr=xavier(1024, 1))
-        self._pool_o2 = AvgPool2D(kernel_size=5, stride=3)
-        self._conv_o2 = ConvLayer(528, 128, 1)
-        self._fc_o2 = Linear(1152, 1024, weight_attr=xavier(2048, 1))
-        self._drop_o2 = Dropout(p=0.7, mode="downscale_in_infer")
-        self._out2 = Linear(1024, num_classes, weight_attr=xavier(1024, 1))
+        if num_classes > 0:
+            # out
+            self._drop = Dropout(p=0.4, mode="downscale_in_infer")
+            self._fc_out = Linear(1024, num_classes, weight_attr=xavier(1024, 1))
+
+            # out1
+            self._conv_o1 = ConvLayer(512, 128, 1)
+            self._fc_o1 = Linear(1152, 1024, weight_attr=xavier(2048, 1))
+            self._drop_o1 = Dropout(p=0.7, mode="downscale_in_infer")
+            self._out1 = Linear(1024, num_classes, weight_attr=xavier(1024, 1))
+
+            # out2
+            self._conv_o2 = ConvLayer(528, 128, 1)
+            self._fc_o2 = Linear(1152, 1024, weight_attr=xavier(2048, 1))
+            self._drop_o2 = Dropout(p=0.7, mode="downscale_in_infer")
+            self._out2 = Linear(1024, num_classes, weight_attr=xavier(1024, 1))
 
     def forward(self, inputs):
         x = self._conv(inputs)
@@ -160,25 +176,31 @@ class GoogLeNet(nn.Layer):
         x = self._ince5a(x)
         ince5b = self._ince5b(x)
 
-        x = self._pool_5(ince5b)
-        x = self._drop(x)
-        x = paddle.squeeze(x, axis=[2, 3])
-        out = self._fc_out(x)
+        out, out1, out2 = ince5b, ince4a, ince4d
 
-        x = self._pool_o1(ince4a)
-        x = self._conv_o1(x)
-        x = paddle.flatten(x, start_axis=1, stop_axis=-1)
-        x = self._fc_o1(x)
-        x = F.relu(x)
-        x = self._drop_o1(x)
-        out1 = self._out1(x)
+        if self.with_pool:
+            out = self._pool_5(out)
+            out1 = self._pool_o1(out1)
+            out2 = self._pool_o2(out2)
 
-        x = self._pool_o2(ince4d)
-        x = self._conv_o2(x)
-        x = paddle.flatten(x, start_axis=1, stop_axis=-1)
-        x = self._fc_o2(x)
-        x = self._drop_o2(x)
-        out2 = self._out2(x)
+        if self.num_classes > 0:
+            out = self._drop(out)
+            out = paddle.squeeze(out, axis=[2, 3])
+            out = self._fc_out(out)
+
+            out1 = self._conv_o1(out1)
+            out1 = paddle.flatten(out1, start_axis=1, stop_axis=-1)
+            out1 = self._fc_o1(out1)
+            out1 = F.relu(out1)
+            out1 = self._drop_o1(out1)
+            out1 = self._out1(out1)
+
+            out2 = self._conv_o2(out2)
+            out2 = paddle.flatten(out2, start_axis=1, stop_axis=-1)
+            out2 = self._fc_o2(out2)
+            out2 = self._drop_o2(out2)
+            out2 = self._out2(out2)
+
         return [out, out1, out2]
 
 

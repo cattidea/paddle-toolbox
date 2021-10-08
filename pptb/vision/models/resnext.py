@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# @author: Ainavo
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -28,28 +26,30 @@ from paddle.nn import AdaptiveAvgPool2D, BatchNorm, Conv2D, Linear, MaxPool2D
 from paddle.nn.initializer import Uniform
 from paddle.utils.download import get_weights_path_from_url
 
+__all__ = []
+
 model_urls = {
-    "ResNeXt50_32x4d": (
+    "resnext50_32x4d": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNeXt50_32x4d_pretrained.pdparams",
         "bf04add2f7fd22efcbe91511bcd1eebe",
     ),
-    "ResNeXt50_64x4d": (
+    "resnext50_64x4d": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNeXt50_64x4d_pretrained.pdparams",
         "46307df0e2d6d41d3b1c1d22b00abc69",
     ),
-    "ResNeXt101_32x4d": (
+    "resnext101_32x4d": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNeXt101_32x4d_pretrained.pdparams",
         "078ca145b3bea964ba0544303a43c36d",
     ),
-    "ResNeXt101_64x4d": (
+    "resnext101_64x4d": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNeXt101_64x4d_pretrained.pdparams",
         "4edc0eb32d3cc5d80eff7cab32cd5c64",
     ),
-    "ResNeXt152_32x4d": (
+    "resnext152_32x4d": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNeXt152_32x4d_pretrained.pdparams",
         "7971cc994d459af167c502366f866378",
     ),
-    "ResNeXt152_64x4d": (
+    "resnext152_64x4d": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNeXt152_64x4d_pretrained.pdparams",
         "836943f03709efec364d486c57d132de",
     ),
@@ -57,7 +57,7 @@ model_urls = {
 
 
 class ConvBNLayer(nn.Layer):
-    def __init__(self, num_channels, num_filters, filter_size, stride=1, groups=1, act=None, data_format="NCHW"):
+    def __init__(self, num_channels, num_filters, filter_size, stride=1, groups=1, act=None):
         super(ConvBNLayer, self).__init__()
         self._conv = Conv2D(
             in_channels=num_channels,
@@ -67,22 +67,19 @@ class ConvBNLayer(nn.Layer):
             padding=(filter_size - 1) // 2,
             groups=groups,
             bias_attr=False,
-            data_format=data_format,
         )
-        self._batch_norm = BatchNorm(num_filters, act=act, data_layout=data_format)
+        self._batch_norm = BatchNorm(num_filters, act=act)
 
     def forward(self, inputs):
-        y = self._conv(inputs)
-        y = self._batch_norm(y)
-        return y
+        x = self._conv(inputs)
+        x = self._batch_norm(x)
+        return x
 
 
 class BottleneckBlock(nn.Layer):
-    def __init__(self, num_channels, num_filters, stride, cardinality, shortcut=True, data_format="NCHW"):
+    def __init__(self, num_channels, num_filters, stride, cardinality, shortcut=True):
         super(BottleneckBlock, self).__init__()
-        self.conv0 = ConvBNLayer(
-            num_channels=num_channels, num_filters=num_filters, filter_size=1, act="relu", data_format=data_format
-        )
+        self.conv0 = ConvBNLayer(num_channels=num_channels, num_filters=num_filters, filter_size=1, act="relu")
         self.conv1 = ConvBNLayer(
             num_channels=num_filters,
             num_filters=num_filters,
@@ -90,14 +87,12 @@ class BottleneckBlock(nn.Layer):
             groups=cardinality,
             stride=stride,
             act="relu",
-            data_format=data_format,
         )
         self.conv2 = ConvBNLayer(
             num_channels=num_filters,
             num_filters=num_filters * 2 if cardinality == 32 else num_filters,
             filter_size=1,
             act=None,
-            data_format=data_format,
         )
 
         if not shortcut:
@@ -106,14 +101,13 @@ class BottleneckBlock(nn.Layer):
                 num_filters=num_filters * 2 if cardinality == 32 else num_filters,
                 filter_size=1,
                 stride=stride,
-                data_format=data_format,
             )
 
         self.shortcut = shortcut
 
     def forward(self, inputs):
-        y = self.conv0(inputs)
-        conv1 = self.conv1(y)
+        x = self.conv0(inputs)
+        conv1 = self.conv1(x)
         conv2 = self.conv2(conv1)
 
         if self.shortcut:
@@ -121,9 +115,9 @@ class BottleneckBlock(nn.Layer):
         else:
             short = self.short(inputs)
 
-        y = paddle.add(x=short, y=conv2)
-        y = F.relu(y)
-        return y
+        x = paddle.add(x=short, y=conv2)
+        x = F.relu(x)
+        return x
 
 
 class ResNeXt(nn.Layer):
@@ -131,12 +125,11 @@ class ResNeXt(nn.Layer):
     `"Aggregated Residual Transformations for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_
 
     Args:
-        layers (int, optional): depth of resnext. Default: 50.
+        depth (int, optional): depth of resnext. Default: 50.
         cardinality (int, optional): cardinality of resnext. Default: 32.
         num_classes (int, optional): output dim of last fc layer. If num_classes <=0, last fc layer
                             will not be defined. Default: 1000.
-        input_image_channel(int, optional): number of input image channels, Default: 3.
-        data_format (str): format of input data. Default: "NCHW".
+        with_pool (bool, optional): use pool before the last fc layer or not. Default: True.
 
     Examples:
         .. code-block:: python
@@ -144,48 +137,36 @@ class ResNeXt(nn.Layer):
             import paddle
             from paddle.vision.models import ResNeXt
 
-            resnext50_32x4d = ResNeXt(layers=50, cardinality=32)
+            resnext50_32x4d = ResNeXt(depth=50, cardinality=32)
 
     """
 
-    def __init__(self, layers=50, num_classes=1000, cardinality=32, input_image_channel=3, data_format="NCHW"):
+    def __init__(self, depth=50, cardinality=32, num_classes=1000, with_pool=True):
         super(ResNeXt, self).__init__()
 
-        self.layers = layers
-        self.data_format = data_format
-        self.input_image_channel = input_image_channel
+        self.depth = depth
         self.cardinality = cardinality
-        supported_layers = [50, 101, 152]
-        assert layers in supported_layers, "supported layers are {} but input layer is {}".format(
-            supported_layers, layers
-        )
+        self.num_classes = num_classes
+        self.with_pool = with_pool
+
+        supported_depth = [50, 101, 152]
+        assert depth in supported_depth, "supported layers are {} but input layer is {}".format(supported_depth, depth)
         supported_cardinality = [32, 64]
         assert cardinality in supported_cardinality, "supported cardinality is {} but input cardinality is {}".format(
             supported_cardinality, cardinality
         )
-        if layers == 50:
-            depth = [3, 4, 6, 3]
-        elif layers == 101:
-            depth = [3, 4, 23, 3]
-        elif layers == 152:
-            depth = [3, 8, 36, 3]
+        layer_cfg = {50: [3, 4, 6, 3], 101: [3, 4, 23, 3], 152: [3, 8, 36, 3]}
+        layers = layer_cfg[depth]
         num_channels = [64, 256, 512, 1024]
         num_filters = [128, 256, 512, 1024] if cardinality == 32 else [256, 512, 1024, 2048]
 
-        self.conv = ConvBNLayer(
-            num_channels=self.input_image_channel,
-            num_filters=64,
-            filter_size=7,
-            stride=2,
-            act="relu",
-            data_format=self.data_format,
-        )
-        self.pool2d_max = MaxPool2D(kernel_size=3, stride=2, padding=1, data_format=self.data_format)
+        self.conv = ConvBNLayer(num_channels=3, num_filters=64, filter_size=7, stride=2, act="relu")
+        self.pool2d_max = MaxPool2D(kernel_size=3, stride=2, padding=1)
 
         self.block_list = []
-        for block in range(len(depth)):
+        for block in range(len(layers)):
             shortcut = False
-            for i in range(depth[block]):
+            for i in range(layers[block]):
                 bottleneck_block = self.add_sublayer(
                     "bb_%d_%d" % (block, i),
                     BottleneckBlock(
@@ -196,39 +177,37 @@ class ResNeXt(nn.Layer):
                         stride=2 if i == 0 and block != 0 else 1,
                         cardinality=self.cardinality,
                         shortcut=shortcut,
-                        data_format=self.data_format,
                     ),
                 )
                 self.block_list.append(bottleneck_block)
                 shortcut = True
 
-        self.pool2d_avg = AdaptiveAvgPool2D(1, data_format=self.data_format)
+        if with_pool:
+            self.pool2d_avg = AdaptiveAvgPool2D(1)
 
-        self.pool2d_avg_channels = num_channels[-1] * 2
-
-        stdv = 1.0 / math.sqrt(self.pool2d_avg_channels * 1.0)
-
-        self.out = Linear(
-            self.pool2d_avg_channels, num_classes, weight_attr=ParamAttr(initializer=Uniform(-stdv, stdv))
-        )
+        if num_classes > 0:
+            self.pool2d_avg_channels = num_channels[-1] * 2
+            stdv = 1.0 / math.sqrt(self.pool2d_avg_channels * 1.0)
+            self.out = Linear(
+                self.pool2d_avg_channels, num_classes, weight_attr=ParamAttr(initializer=Uniform(-stdv, stdv))
+            )
 
     def forward(self, inputs):
         with paddle.static.amp.fp16_guard():
-            if self.data_format == "NHWC":
-                inputs = paddle.tensor.transpose(inputs, [0, 2, 3, 1])
-                inputs.stop_gradient = True
-            y = self.conv(inputs)
-            y = self.pool2d_max(y)
+            x = self.conv(inputs)
+            x = self.pool2d_max(x)
             for block in self.block_list:
-                y = block(y)
-            y = self.pool2d_avg(y)
-            y = paddle.reshape(y, shape=[-1, self.pool2d_avg_channels])
-            y = self.out(y)
-            return y
+                x = block(x)
+            if self.with_pool:
+                x = self.pool2d_avg(x)
+            if self.num_classes > 0:
+                x = paddle.reshape(x, shape=[-1, self.pool2d_avg_channels])
+                x = self.out(x)
+            return x
 
 
-def _resnext(arch, layers, cardinality, pretrained, **kwargs):
-    model = ResNeXt(layers=layers, cardinality=cardinality, **kwargs)
+def _resnext(arch, depth, cardinality, pretrained, **kwargs):
+    model = ResNeXt(depth=depth, cardinality=cardinality, **kwargs)
     if pretrained:
         assert (
             arch in model_urls
@@ -260,7 +239,7 @@ def resnext50_32x4d(pretrained=False, **kwargs):
             # build model and load imagenet pretrained weight
             # model = resnext50_32x4d(pretrained=True)
     """
-    return _resnext("ResNeXt50_32x4d", 50, 32, pretrained, **kwargs)
+    return _resnext("resnext50_32x4d", 50, 32, pretrained, **kwargs)
 
 
 def resnext50_64x4d(pretrained=False, **kwargs):
@@ -282,7 +261,7 @@ def resnext50_64x4d(pretrained=False, **kwargs):
             # build model and load imagenet pretrained weight
             # model = resnext50_64x4d(pretrained=True)
     """
-    return _resnext("ResNeXt50_64x4d", 50, 64, pretrained, **kwargs)
+    return _resnext("resnext50_64x4d", 50, 64, pretrained, **kwargs)
 
 
 def resnext101_32x4d(pretrained=False, **kwargs):
@@ -304,7 +283,7 @@ def resnext101_32x4d(pretrained=False, **kwargs):
             # build model and load imagenet pretrained weight
             # model = resnext101_32x4d(pretrained=True)
     """
-    return _resnext("ResNeXt101_32x4d", 101, 32, pretrained, **kwargs)
+    return _resnext("resnext101_32x4d", 101, 32, pretrained, **kwargs)
 
 
 def resnext101_64x4d(pretrained=False, **kwargs):
@@ -326,7 +305,7 @@ def resnext101_64x4d(pretrained=False, **kwargs):
             # build model and load imagenet pretrained weight
             # model = resnext101_64x4d(pretrained=True)
     """
-    return _resnext("ResNeXt101_64x4d", 101, 64, pretrained, **kwargs)
+    return _resnext("resnext101_64x4d", 101, 64, pretrained, **kwargs)
 
 
 def resnext152_32x4d(pretrained=False, **kwargs):
@@ -348,7 +327,7 @@ def resnext152_32x4d(pretrained=False, **kwargs):
             # build model and load imagenet pretrained weight
             # model = resnext152_32x4d(pretrained=True)
     """
-    return _resnext("ResNeXt152_32x4d", 152, 32, pretrained, **kwargs)
+    return _resnext("resnext152_32x4d", 152, 32, pretrained, **kwargs)
 
 
 def resnext152_64x4d(pretrained=False, **kwargs):
@@ -370,4 +349,4 @@ def resnext152_64x4d(pretrained=False, **kwargs):
             # build model and load imagenet pretrained weight
             # model = resnext152_64x4d(pretrained=True)
     """
-    return _resnext("ResNeXt152_64x4d", 152, 64, pretrained, **kwargs)
+    return _resnext("resnext152_64x4d", 152, 64, pretrained, **kwargs)

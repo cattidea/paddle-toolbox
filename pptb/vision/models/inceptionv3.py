@@ -26,6 +26,8 @@ from paddle.fluid.param_attr import ParamAttr
 
 from paddle.utils.download import get_weights_path_from_url
 
+__all__ = []
+
 model_urls = {
     "inception_v3": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/InceptionV3_pretrained.pdparams",
@@ -275,9 +277,9 @@ class InceptionV3(nn.Layer):
     """
     InceptionV3
     Args:
-        num_classes: int=1000. The number of classes.
-    Returns:
-        model: nn.Layer. Specific InceptionV3 model depends on args.
+        num_classes (int, optional): output dim of last fc layer. If num_classes <=0, last fc layer
+                            will not be defined. Default: 1000.
+        with_pool (bool, optional): use pool before the last fc layer or not. Default: True.
 
     Examples:
         .. code-block:: python
@@ -288,8 +290,10 @@ class InceptionV3(nn.Layer):
             inception_v3 = InceptionV3()
     """
 
-    def __init__(self, num_classes=1000):
+    def __init__(self, num_classes=1000, with_pool=True):
         super().__init__()
+        self.num_classes = num_classes
+        self.with_pool = with_pool
         self.layers_config = {
             "inception_a": [[192, 256, 288], [32, 64, 64]],
             "inception_b": [288],
@@ -327,33 +331,38 @@ class InceptionV3(nn.Layer):
             inception_e = InceptionE(inception_e_list[i])
             self.inception_block_list.append(inception_e)
 
-        self.avg_pool = AdaptiveAvgPool2D(1)
-        self.dropout = Dropout(p=0.2, mode="downscale_in_infer")
-        stdv = 1.0 / math.sqrt(2048 * 1.0)
-        self.fc = Linear(
-            2048, num_classes, weight_attr=ParamAttr(initializer=Uniform(-stdv, stdv)), bias_attr=ParamAttr()
-        )
+        if with_pool:
+            self.avg_pool = AdaptiveAvgPool2D(1)
+
+        if num_classes > 0:
+            self.dropout = Dropout(p=0.2, mode="downscale_in_infer")
+            stdv = 1.0 / math.sqrt(2048 * 1.0)
+            self.fc = Linear(
+                2048, num_classes, weight_attr=ParamAttr(initializer=Uniform(-stdv, stdv)), bias_attr=ParamAttr()
+            )
 
     def forward(self, x):
         x = self.inception_stem(x)
         for inception_block in self.inception_block_list:
             x = inception_block(x)
-        x = self.avg_pool(x)
-        x = paddle.reshape(x, shape=[-1, 2048])
-        x = self.dropout(x)
-        x = self.fc(x)
+
+        if self.with_pool:
+            x = self.avg_pool(x)
+
+        if self.num_classes > 0:
+            x = paddle.reshape(x, shape=[-1, 2048])
+            x = self.dropout(x)
+            x = self.fc(x)
         return x
 
 
 def inception_v3(pretrained=False, **kwargs):
     """
-    inception_v3
-    Args:
-        pretrained: bool=false or str. if `true` load pretrained parameters, `false` otherwise.
-                    if str, means the path of the pretrained model.
+    InceptionV3 model from
+    `"Rethinking the Inception Architecture for Computer Vision" <https://arxiv.org/pdf/1512.00567.pdf>`_
 
-    Returns:
-        model: nn.Layer. Specific `inception_v3` model
+    Args:
+        pretrained (bool): If True, returns a model pre-trained on ImageNet
 
     Examples:
         .. code-block:: python
