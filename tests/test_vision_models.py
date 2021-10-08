@@ -47,7 +47,7 @@ def test_inception_v3():
 def test_resnext50_32x4d():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
-    model = resnext50_32x4d(prtrained=True, num_classes=num_classes)
+    model = resnext50_32x4d(pretrained=True, num_classes=num_classes)
     output = model_forwards(model, data_shape=(3, 224, 224), batch_size=batch_size)
     assert output.shape == [batch_size, num_classes]
 
