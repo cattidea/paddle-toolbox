@@ -25,5 +25,9 @@ from .shufflenetv2 import shufflenet_v2_x1_5
 from .shufflenetv2 import shufflenet_v2_x2_0
 from .shufflenetv2 import shufflenet_v2_swish
 
+# ConvMixer
+from .convmixer import convmixer_1536_20
+from .convmixer import convmixer_1024_20
+
 # DenseNet
 from .densenet import *
