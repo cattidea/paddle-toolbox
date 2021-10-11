@@ -19,6 +19,11 @@ from pptb.vision.models import (
     shufflenet_v2_x2_0,
     shufflenet_v2_swish,
 )
+from pptb.vision.models import (
+    convmixer_768_32,
+    convmixer_1024_20_ks9_p14,
+    convmixer_1536_20,
+)
 
 
 def model_forwards(model, data_shape=(3, 224, 224), batch_size=3):
@@ -144,5 +149,29 @@ def test_shufflenet_v2_swish():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
     model = shufflenet_v2_swish(num_classes=num_classes)
+    output = model_forwards(model, data_shape=(3, 224, 224), batch_size=batch_size)
+    assert output.shape == [batch_size, num_classes]
+
+
+def test_convmixer_768_32():
+    batch_size = 2 ** np.random.randint(3, 5)
+    num_classes = np.random.randint(10, 1000)
+    model = convmixer_768_32(pretrained=True, num_classes=num_classes)
+    output = model_forwards(model, data_shape=(3, 224, 224), batch_size=batch_size)
+    assert output.shape == [batch_size, num_classes]
+
+
+def test_convmixer_1024_20_ks9_p14():
+    batch_size = 2 ** np.random.randint(3, 5)
+    num_classes = np.random.randint(10, 1000)
+    model = convmixer_1024_20_ks9_p14(num_classes=num_classes)
+    output = model_forwards(model, data_shape=(3, 224, 224), batch_size=batch_size)
+    assert output.shape == [batch_size, num_classes]
+
+
+def test_convmixer_1536_20():
+    batch_size = 2 ** np.random.randint(3, 5)
+    num_classes = np.random.randint(10, 1000)
+    model = convmixer_1536_20(num_classes=num_classes)
     output = model_forwards(model, data_shape=(3, 224, 224), batch_size=batch_size)
     assert output.shape == [batch_size, num_classes]
