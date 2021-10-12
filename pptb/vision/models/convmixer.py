@@ -8,15 +8,15 @@ __all__ = []
 
 model_urls = {
     "convmixer_768_32": (
-        "https://github.com/cattidea/paddle-toolbox/releases/download/convmixer-pretrained-v1/convmixer_768_32_ks7_p7_relu.pdparams",
+        "https://ghproxy.com/https://github.com/cattidea/paddle-toolbox/releases/download/convmixer-pretrained-v1/convmixer_768_32_ks7_p7_relu.pdparams",
         "e0812272ad8b994aa169cfd27d93f626",
     ),
     "convmixer_1024_20_ks9_p14": (
-        "https://github.com/cattidea/paddle-toolbox/releases/download/convmixer-pretrained-v1/convmixer_1024_20_ks9_p14.pdparams",
+        "https://ghproxy.com/https://github.com/cattidea/paddle-toolbox/releases/download/convmixer-pretrained-v1/convmixer_1024_20_ks9_p14.pdparams",
         "53462088cb1e55f7a43bc0b9adb9e683",
     ),
     "convmixer_1536_20": (
-        "https://github.com/cattidea/paddle-toolbox/releases/download/convmixer-pretrained-v1/convmixer_1536_20_ks9_p7.pdparams",
+        "https://ghproxy.com/https://github.com/cattidea/paddle-toolbox/releases/download/convmixer-pretrained-v1/convmixer_1536_20_ks9_p7.pdparams",
         "0442b7e98b873a707de5a8d5419db26d",
     ),
 }
@@ -116,7 +116,7 @@ def convmixer_768_32(pretrained=False, **kwargs):
 
 def convmixer_1024_20_ks9_p14(pretrained=False, **kwargs):
     return _convmixer(
-        "convmixer_1024_20",
+        "convmixer_1024_20_ks9_p14",
         1024,
         20,
         kernel_size=9,

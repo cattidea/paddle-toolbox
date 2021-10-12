@@ -13,7 +13,7 @@ pip install pptb
 由于仍处于开发阶段，API 较为不稳定，建议安装时指定版本号
 
 ```bash
-pip install pptb==0.1.3
+pip install pptb==0.1.4
 ```
 
 ### 直接从 GitHub 拉取最新代码
@@ -100,9 +100,9 @@ for X_batch, y_batch in train_loader():
    # ...
 ```
 
-### 各种模型
+### 图像模型
 
-已支持一些 PaddleClas 下的预训练模型
+已支持一些 PaddleClas 下的预训练模型，以及 ConvMixer
 
 日后如果合入 paddle，这些模型会删除
 
@@ -110,6 +110,7 @@ for X_batch, y_batch in train_loader():
 -  Incetpionv3
 -  ResNeXt
 -  ShuffleNetV2
+-  ConvMixer
 -  DenseNet (未完整支持)
 
 ```python
@@ -120,6 +121,14 @@ model = ppmodels.resnext50_32x4d(pretrained=True)
 ```
 
 PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很多比较新的模型的 [ppim](https://github.com/AgentMaker/Paddle-Image-Models)~
+
+#### ConvMixer
+
+| Model Name                | Kernel Size | Patch Size | Top-1                                                 | Top-5  |
+| ------------------------- | ----------- | ---------- | ----------------------------------------------------- | ------ |
+| convmixer_768_32          | 7           | 7          | 0.7974<span style="color:green;"><sub>(-0.0042)</sub> | 0.9486 |
+| convmixer_1024_20_ks9_p14 | 9           | 14         | 0.7681<span style="color:green;"><sub>(-0.0013)</sub> | 0.9335 |
+| convmixer_1536_20         | 9           | 7          | 0.8083<sub><span style="color:green;">(-0.0054)</sub> | 0.9557 |
 
 ## References
 
