@@ -16,6 +16,9 @@ black = "^21.9b0"
 [tool.poetry.extras]
 paddle = ["paddlepaddle"]
 
+[tool.pytest.ini_options]
+markers = ["ci_skip", "ci_only"]
+
 [tool.black]
 line-length = 120
 

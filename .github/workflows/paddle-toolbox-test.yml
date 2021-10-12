@@ -35,4 +35,4 @@ jobs:
 
       - name: paddle toolbox test
         run: |
-          poetry run pytest
+          poetry run pytest -m "not ci_skip"
