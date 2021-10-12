@@ -3,6 +3,10 @@ name = "pptb"
 version = "0.1.4"
 description = "🚣 一些常用的但 paddle 里没有的小工具～"
 authors = ["Nyakku Shigure <sigure.qaq@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/cattidea/paddle-toolbox"
+repository = "https://github.com/cattidea/paddle-toolbox"
 keywords = ["python", "paddle", "toolbox"]
 
 [tool.poetry.dependencies]
@@ -15,6 +19,9 @@ black = "^21.9b0"
 
 [tool.poetry.extras]
 paddle = ["paddlepaddle"]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/cattidea/paddle-toolbox/issues"
 
 [tool.pytest.ini_options]
 markers = ["ci_skip", "ci_only"]
