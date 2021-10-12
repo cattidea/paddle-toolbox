@@ -62,13 +62,13 @@ train_batch_size = 32
 learning_rate = 3e-4
 step_each_epoch = len(train_set) // train_batch_size
 num_epochs = 40
-warmup_epoch = 3
+warmup_epochs = 3
 
 lr_scheduler = CosineWarmup(
     learning_rate,
-    step_each_epoch = step_each_epoch,
-    num_epochs = num_epochs,
-    warmup_epoch = warmup_epoch,
+    T_max = num_epochs * step_each_epoch,
+    warmup_steps = warmup_epochs * step_each_epoch,
+    warmup_start_lr = 0.0,
     last_epoch = -1
 )
 
