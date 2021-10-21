@@ -1,4 +1,4 @@
-# Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
+# Copyright (c) 2021 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import paddle
-from paddle.nn import Layer, Conv2D, MaxPool2D, AdaptiveAvgPool2D, BatchNorm, Linear
-from paddle.nn.initializer import KaimingNormal
-from paddle.fluid.layers import reshape, transpose, concat, split
+from paddle.fluid.layers import concat, reshape, split, transpose
 from paddle.fluid.param_attr import ParamAttr
+from paddle.nn import AdaptiveAvgPool2D, BatchNorm, Conv2D, Layer, Linear, MaxPool2D
+from paddle.nn.initializer import KaimingNormal
 from paddle.utils.download import get_weights_path_from_url
 
 __all__ = []

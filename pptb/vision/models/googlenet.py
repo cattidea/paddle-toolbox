@@ -1,4 +1,4 @@
-# Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
+# Copyright (c) 2021 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,17 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import division
-from __future__ import print_function
-
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
-
-from paddle.nn import Conv2D, Linear, Dropout
-from paddle.nn import MaxPool2D, AvgPool2D, AdaptiveAvgPool2D
-from paddle.nn.initializer import Uniform
 from paddle.fluid.param_attr import ParamAttr
+from paddle.nn import AdaptiveAvgPool2D, AvgPool2D, Conv2D, Dropout, Linear, MaxPool2D
+from paddle.nn.initializer import Uniform
 from paddle.utils.download import get_weights_path_from_url
 
 __all__ = []
