@@ -100,17 +100,17 @@ for X_batch, y_batch in train_loader():
    # ...
 ```
 
-### 图像模型
+### Vision models
 
-已支持一些 PaddleClas 下的预训练模型，以及 ConvMixer
+提供更加丰富的 backbone，所有模型均会提供预训练权重
 
-日后如果合入 paddle，这些模型会删除
+已支持一些 PaddleClas 下的预训练模型，以及比较新的 ConvMixer
 
 -  GoogLeNet
 -  Incetpionv3
--  ResNeXt
+-  ResNeXt（已并入 paddle 主线）
 -  ShuffleNetV2
--  ConvMixer
+-  ConvMixer（预训练权重转自 PyTorch）
 -  DenseNet (未完整支持)
 
 ```python
@@ -129,6 +129,20 @@ PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很�
 | convmixer_768_32          | 7           | 7          | 0.7974<span style="color:green;"><sub>(-0.0042)</sub> | 0.9486 |
 | convmixer_1024_20_ks9_p14 | 9           | 14         | 0.7681<span style="color:green;"><sub>(-0.0013)</sub> | 0.9335 |
 | convmixer_1536_20         | 9           | 7          | 0.8083<sub><span style="color:green;">(-0.0054)</sub> | 0.9557 |
+
+### TODO List
+
+一些近期想做的功能
+
+-  [ ] Cutout
+-  [ ] Activation、Mish
+-  [ ] Lookahead (paddle.incubate.LookAhead 已经有了)
+-  [ ] 更多 vision models
+   -  [ ] DenseNet（完整支持）
+   -  [ ] Xception
+   -  [ ] Swin Transformer
+   -  [ ] MobileNetV3
+-  [ ] 完整的单元测试
 
 ## References
 
