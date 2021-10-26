@@ -1,7 +1,7 @@
 from ...utils.paddle_version import PADDLE_VERSION_TUPLE
 
 # GoogLeNet
-if PADDLE_VERSION_TUPLE >= (2, 2, 0):
+if PADDLE_VERSION_TUPLE >= (2, 3, 0):
     from paddle.vision.models import GoogLeNet
     from paddle.vision.models import googlenet
 else:
@@ -9,7 +9,7 @@ else:
     from .googlenet import googlenet
 
 # InceptionV3
-if PADDLE_VERSION_TUPLE >= (2, 2, 0):
+if PADDLE_VERSION_TUPLE >= (2, 3, 0):
     from paddle.vision.models import InceptionV3
     from paddle.vision.models import inception_v3
 else:
@@ -17,7 +17,7 @@ else:
     from .inceptionv3 import inception_v3
 
 # ResNeXt
-if PADDLE_VERSION_TUPLE >= (2, 2, 0):
+if PADDLE_VERSION_TUPLE >= (2, 3, 0):
     from paddle.vision.models import ResNeXt
     from paddle.vision.models import resnext50_32x4d
     from paddle.vision.models import resnext50_64x4d
@@ -35,7 +35,7 @@ else:
     from .resnext import resnext152_64x4d
 
 # ShuffleNetV2
-if PADDLE_VERSION_TUPLE >= (2, 2, 0):
+if PADDLE_VERSION_TUPLE >= (2, 3, 0):
     from paddle.vision.models import ShuffleNetV2
     from paddle.vision.models import shufflenet_v2_x0_25
     from paddle.vision.models import shufflenet_v2_x0_33
