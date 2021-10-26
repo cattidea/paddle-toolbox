@@ -107,7 +107,7 @@ for X_batch, y_batch in train_loader():
 已支持一些 PaddleClas 下的预训练模型，以及比较新的 ConvMixer
 
 -  GoogLeNet
--  Incetpionv3
+-  Incetpionv3（已并入 paddle 主线）
 -  ResNeXt（已并入 paddle 主线）
 -  ShuffleNetV2
 -  ConvMixer（预训练权重转自 PyTorch）
@@ -136,12 +136,12 @@ PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很�
 
 -  [ ] Cutout
 -  [ ] Activation、Mish
--  [ ] Lookahead (paddle.incubate.LookAhead 已经有了)
+-  [ ] ~~Lookahead (paddle.incubate.LookAhead 已经有了)~~
 -  [ ] 更多 vision models
-   -  [ ] DenseNet（完整支持）
+   -  [ ] MobileNetV3
    -  [ ] Xception
    -  [ ] Swin Transformer
-   -  [ ] MobileNetV3
+   -  [ ] DenseNet（完整支持）
 -  [ ] 完整的单元测试
 
 ## References
