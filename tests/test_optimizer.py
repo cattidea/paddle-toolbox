@@ -4,16 +4,26 @@ from pptb.optimizer.lr import CosineWarmup
 
 
 def test_cosine_warmup():
-    start_lr = 1.0
-    max_steps = 100
-    warmup_steps = int(max_steps * np.random.random() * 0.8)
+    max_lr = 1
+    warmup_start_lr = max_lr * np.random.random() * 0.8
+    cosine_end_lr = max_lr * np.random.random() * 0.2
+    total_steps = 100
+    warmup_steps = int(total_steps * np.random.random() * 0.8)
 
     lr_scheduler = CosineWarmup(
-        start_lr, T_max=max_steps, warmup_steps=warmup_steps, warmup_start_lr=0.0, last_epoch=-1
+        max_lr,
+        total_steps=total_steps,
+        warmup_steps=warmup_steps,
+        warmup_start_lr=warmup_start_lr,
+        cosine_end_lr=cosine_end_lr,
+        last_epoch=-1,
     )
 
     lr_history = []
-    for _ in range(max_steps):
+    lr_history.append(lr_scheduler())
+    for i in range(total_steps):
         lr_scheduler.step()
         lr_history.append(lr_scheduler())
-    assert lr_history[warmup_steps - 1] == start_lr
+    assert lr_history[warmup_steps] == max_lr
+    assert lr_history[0] == warmup_start_lr
+    assert lr_history[-1] == cosine_end_lr

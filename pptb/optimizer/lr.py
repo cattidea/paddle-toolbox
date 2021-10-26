@@ -9,15 +9,17 @@ class CosineWarmup(paddle.optimizer.lr.LinearWarmup):
     def __init__(
         self,
         learning_rate,
-        T_max,
+        total_steps,
         warmup_steps=1,
         warmup_start_lr=0.0,
+        cosine_end_lr=0.0,
         last_epoch=-1,
         verbose=False,
     ):
         lr_scheduler = paddle.optimizer.lr.CosineAnnealingDecay(
             learning_rate=learning_rate,
-            T_max=T_max,
+            T_max=total_steps - warmup_steps,
+            eta_min=cosine_end_lr,
             last_epoch=last_epoch,
             verbose=verbose,
         )

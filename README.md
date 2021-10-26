@@ -66,9 +66,10 @@ warmup_epochs = 3
 
 lr_scheduler = CosineWarmup(
     learning_rate,
-    T_max = num_epochs * step_each_epoch,
+    total_steps = num_epochs * step_each_epoch,
     warmup_steps = warmup_epochs * step_each_epoch,
     warmup_start_lr = 0.0,
+    cosine_end_lr = 0.0,
     last_epoch = -1
 )
 
