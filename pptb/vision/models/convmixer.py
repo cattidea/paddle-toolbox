@@ -16,6 +16,8 @@ import paddle
 import paddle.nn as nn
 from paddle.utils.download import get_weights_path_from_url
 
+from ...nn import Residual
+
 __all__ = []
 
 model_urls = {
@@ -32,15 +34,6 @@ model_urls = {
         "0442b7e98b873a707de5a8d5419db26d",
     ),
 }
-
-
-class Residual(nn.Layer):
-    def __init__(self, fn):
-        super().__init__()
-        self.fn = fn
-
-    def forward(self, x):
-        return self.fn(x) + x
 
 
 class ConvMixer(nn.Layer):
