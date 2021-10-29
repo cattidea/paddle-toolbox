@@ -18,7 +18,7 @@ def _index_tensor_by_1dtensor(tensor: paddle.Tensor, indices: paddle.Tensor) -> 
     # see https://github.com/PaddlePaddle/Paddle/issues/35891
     original_ndim = tensor.ndim
     tensor = tensor[indices]
-    if indices.ndim == 1:
+    if indices.shape[0] == 1:
         tensor = tensor.unsqueeze(0)
     assert tensor.ndim == original_ndim
     return tensor
