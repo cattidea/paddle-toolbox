@@ -100,18 +100,14 @@ class MixingDataController:
     def __init__(
         self,
         *,
-        mixup=True,
-        cutmix=True,
+        mixup_prob=0.3,
+        cutmix_prob=0.3,
         mixup_alpha=0.2,
         cutmix_alpha=0.2,
-        mixup_prob=0.2,
-        cutmix_prob=0.2,
         cutmix_axes=[2, 3],
         loss_function=paddle.nn.CrossEntropyLoss(),
         metric_function=paddle.metric.accuracy,
     ):
-        self.mixup = mixup
-        self.cutmix = cutmix
         self.mixup_alpha = mixup_alpha
         self.cutmix_alpha = cutmix_alpha
         self.mixup_prob = mixup_prob

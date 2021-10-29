@@ -79,12 +79,10 @@ def test_cutmix(batch_size: int, data_shape: Sequence[int], mix_axes: Sequence[i
 @pytest.mark.parametrize("is_numpy", [True, False])
 def test_mixing_data_controller(is_numpy: bool):
     mixing_data_controller = MixingDataController(
-        mixup=True,
-        cutmix=True,
+        mixup_prob=0.3,
+        cutmix_prob=0.3,
         mixup_alpha=0.2,
         cutmix_alpha=0.2,
-        mixup_prob=0.2,
-        cutmix_prob=0.2,
         cutmix_axes=[2, 3],
         loss_function=paddle.nn.CrossEntropyLoss(),
         metric_function=paddle.metric.accuracy,
