@@ -18,7 +18,7 @@ pip install pptb==0.1.4
 
 ### 直接从 GitHub 拉取最新代码
 
-这里以 AiStudio 为例
+这里以 AI Studio 为例
 
 ```bash
 git clone https://github.com/cattidea/paddle-toolbox.git work/paddle-toolbox/
@@ -75,7 +75,9 @@ lr_scheduler = CosineWarmup(
 
 ```
 
-### Mixup
+### Mixup && Cutmix
+
+#### Mixup
 
 ```python
 import paddle
@@ -97,6 +99,43 @@ for X_batch, y_batch in train_loader():
       predicts = model(X_batch)
       loss = loss_function(predicts, y_batch)
       acc = paddle.metric.accuracy(predicts, y_batch)
+
+   # ...
+```
+
+除了用于处理 paddle 里 `Tensor` 的 `mixup_data`，还可以使用 `mixup_data_numpy` 处理 numpy 的 ndarray。
+
+#### Cutmix
+
+和 Mixup 一样，只需要将 `mixup_data` 换为 `cutmix_data` 即可，与 `mixup_data` 不同的是，`cutmix_data` 还接收一个额外参数 `axes` 用于控制需要 mix 的是哪几根 axis，默认 `axes = [2, 3]`，也即 `NCHW` 格式图片数据对应的 `H` 与 `W` 两根 axis。
+
+#### MixingDataController
+
+用于方便管理使用 Mixup 和 Cutmix
+
+```python
+import paddle
+from pptb.tools import MixingDataController
+
+# ...
+
+mixing_data_controller = MixingDataController(
+   mixup=True,
+   cutmix=True,
+   mixup_alpha=0.2,
+   cutmix_alpha=0.2,
+   mixup_prob=0.2,
+   cutmix_prob=0.2,
+   cutmix_axes=[2, 3],
+   loss_function=paddle.nn.CrossEntropyLoss(),
+   metric_function=paddle.metric.accuracy,
+)
+
+for X_batch, y_batch in train_loader():
+   X_batch_mixed, y_batch_a, y_batch_b, lam = mixing_data_controller.mix(X_batch, y_batch, is_numpy=False)
+   predicts = model(X_batch_mixed)
+   loss = mixing_data_controller.loss(predicts, y_batch_a, y_batch_b, lam)
+   acc = mixing_data_controller.metric(predicts, y_batch_a, y_batch_b, lam)
 
    # ...
 ```
@@ -135,7 +174,7 @@ PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很�
 
 一些近期想做的功能
 
--  [ ] Cutout
+-  [x] Cutmix
 -  [ ] Activation、Mish
 -  [ ] ~~Lookahead (paddle.incubate.LookAhead 已经有了)~~
 -  [ ] 更多 vision models
