@@ -1,11 +1,19 @@
-import numpy as np
-import paddle
-import pytest
 from typing import Sequence
 
-from pptb.tools import mixup_criterion, mixup_data, mixup_metric
-from pptb.tools import cutmix_criterion, cutmix_data, cutmix_metric
-from pptb.tools import MixingDataController
+import numpy as np
+import paddle
+import paddle.nn as nn
+import pytest
+
+from pptb.tools import (
+    MixingDataController,
+    cutmix_criterion,
+    cutmix_data,
+    cutmix_metric,
+    mixup_criterion,
+    mixup_data,
+    mixup_metric,
+)
 from pptb.vision.models import resnext50_32x4d
 
 
