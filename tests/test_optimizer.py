@@ -8,7 +8,7 @@ def test_cosine_warmup():
     warmup_start_lr = max_lr * np.random.random() * 0.8
     cosine_end_lr = max_lr * np.random.random() * 0.2
     total_steps = 100
-    warmup_steps = int(total_steps * np.random.random() * 0.8)
+    warmup_steps = int(total_steps * np.random.random() * 0.6) + 2
 
     lr_scheduler = CosineWarmup(
         max_lr,
