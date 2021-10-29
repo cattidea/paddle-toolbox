@@ -67,7 +67,7 @@ def cutmix_data(data, labels, alpha=0.2, axes=[2, 3]):
     lam = np.random.beta(alpha, alpha)
 
     indices_0 = paddle.randperm(data.shape[0])
-    labels_a, labels_b = labels, labels[indices_0]
+    labels_a, labels_b = labels, _index_tensor_by_1dtensor(labels, indices_0)
 
     cut_ratio = np.power(1 - lam, 1 / len(axes))
     bounds = [_cutmix_on_one_axis(data.shape[axis], cut_ratio) for axis in axes]
