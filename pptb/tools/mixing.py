@@ -116,8 +116,8 @@ class MixingDataController:
         self.loss_function = loss_function
         self.metric_function = metric_function
 
-        assert self.mixup_prob > 0
-        assert self.cutmix_prob > 0
+        assert self.mixup_prob >= 0
+        assert self.cutmix_prob >= 0
         assert np.sum([self.mixup_prob, self.cutmix_prob]) <= 1, "mixup_prob + cutmix_prob > 1"
 
     def mix(self, data, labels, is_numpy=False):
