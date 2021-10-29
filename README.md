@@ -13,7 +13,7 @@ pip install pptb
 由于仍处于开发阶段，API 较为不稳定，建议安装时指定版本号
 
 ```bash
-pip install pptb==0.1.4
+pip install pptb==0.1.6
 ```
 
 ### 直接从 GitHub 拉取最新代码
