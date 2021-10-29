@@ -75,6 +75,12 @@ def test_mixing_data_controller(is_numpy: bool):
         fake_labels = paddle.to_tensor(fake_labels)
 
     X_batch_mixed, y_batch_a, y_batch_b, lam = mixing_data_controller.mix(fake_inputs, fake_labels, is_numpy=is_numpy)
+
+    if is_numpy:
+        X_batch_mixed = paddle.to_tensor(X_batch_mixed)
+        y_batch_a = paddle.to_tensor(y_batch_a)
+        y_batch_b = paddle.to_tensor(y_batch_b)
+
     predicts = model(X_batch_mixed)
     loss = mixing_data_controller.loss(predicts, y_batch_a, y_batch_b, lam)
     acc = mixing_data_controller.metric(predicts, y_batch_a, y_batch_b, lam)
