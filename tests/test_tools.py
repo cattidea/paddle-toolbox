@@ -80,11 +80,21 @@ def test_cutmix(batch_size: int, data_shape: Sequence[int], mix_axes: Sequence[i
     assert y_batch_a.shape == y_batch_b.shape == fake_labels.shape
 
 
-@pytest.mark.parametrize("is_numpy", [True, False])
-def test_mixing_data_controller(is_numpy: bool):
+@pytest.mark.parametrize(
+    "is_numpy, mixup_prob, cutmix_prob",
+    [
+        (True, 0, 0),
+        (True, 1, 0),
+        (True, 0, 1),
+        (False, 0, 0),
+        (False, 1, 0),
+        (False, 0, 1),
+    ],
+)
+def test_mixing_data_controller(is_numpy: bool, mixup_prob: float, cutmix_prob: float):
     mixing_data_controller = MixingDataController(
-        mixup_prob=0.3,
-        cutmix_prob=0.3,
+        mixup_prob=mixup_prob,
+        cutmix_prob=cutmix_prob,
         mixup_alpha=0.2,
         cutmix_alpha=0.2,
         cutmix_axes=[2, 3],
@@ -114,7 +124,11 @@ def test_mixing_data_controller(is_numpy: bool):
     loss = mixing_data_controller.loss(predicts, y_batch_a, y_batch_b, lam)
     acc = mixing_data_controller.metric(predicts, y_batch_a, y_batch_b, lam)
 
+    if is_numpy:
+        fake_inputs = paddle.to_tensor(fake_inputs)
+        fake_labels = paddle.to_tensor(fake_labels)
+
     assert X_batch_mixed.dtype == fake_inputs.dtype
     assert y_batch_a.dtype == y_batch_b.dtype == fake_labels.dtype
-    assert X_batch_mixed.shape == list(fake_inputs.shape)
-    assert y_batch_a.shape == y_batch_b.shape == list(fake_labels.shape)
+    assert X_batch_mixed.shape == fake_inputs.shape
+    assert y_batch_a.shape == y_batch_b.shape == fake_labels.shape
