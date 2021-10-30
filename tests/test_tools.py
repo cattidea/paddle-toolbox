@@ -46,6 +46,8 @@ def test_mixup(batch_size: int):
     loss = mixup_criterion(loss_function, predicts, y_batch_a, y_batch_b, lam)
     acc = mixup_metric(paddle.metric.accuracy, predicts, y_batch_a, y_batch_b, lam)
 
+    assert X_batch_mixed.dtype == fake_inputs.dtype
+    assert y_batch_a.dtype == y_batch_b.dtype == fake_labels.dtype
     assert X_batch_mixed.shape == fake_inputs.shape
     assert y_batch_a.shape == y_batch_b.shape == fake_labels.shape
 
@@ -72,6 +74,8 @@ def test_cutmix(batch_size: int, data_shape: Sequence[int], mix_axes: Sequence[i
     loss = cutmix_criterion(loss_function, predicts, y_batch_a, y_batch_b, lam)
     acc = cutmix_metric(paddle.metric.accuracy, predicts, y_batch_a, y_batch_b, lam)
 
+    assert X_batch_mixed.dtype == fake_inputs.dtype
+    assert y_batch_a.dtype == y_batch_b.dtype == fake_labels.dtype
     assert X_batch_mixed.shape == fake_inputs.shape
     assert y_batch_a.shape == y_batch_b.shape == fake_labels.shape
 
@@ -110,5 +114,7 @@ def test_mixing_data_controller(is_numpy: bool):
     loss = mixing_data_controller.loss(predicts, y_batch_a, y_batch_b, lam)
     acc = mixing_data_controller.metric(predicts, y_batch_a, y_batch_b, lam)
 
+    assert X_batch_mixed.dtype == fake_inputs.dtype
+    assert y_batch_a.dtype == y_batch_b.dtype == fake_labels.dtype
     assert X_batch_mixed.shape == list(fake_inputs.shape)
     assert y_batch_a.shape == y_batch_b.shape == list(fake_labels.shape)
