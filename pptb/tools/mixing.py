@@ -25,22 +25,24 @@ def _index_tensor_by_1dtensor(tensor: paddle.Tensor, indices: paddle.Tensor) -> 
 
 
 def mixup_data_numpy(data, labels, alpha=0.2):
+    original_dtype = data.dtype
     lam = np.random.beta(alpha, alpha)
     index = np.random.permutation(data.shape[0])
     data_mixed = lam * data + (1 - lam) * data[index]
 
     labels_a, labels_b = labels, labels[index]
-    return data_mixed, labels_a, labels_b, lam
+    return data_mixed.astype(original_dtype), labels_a, labels_b, lam
 
 
 def mixup_data(data, labels, alpha=0.2):
     # @refs: https://www.zhihu.com/question/308572298
+    original_dtype = data.dtype
     lam = np.random.beta(alpha, alpha)
     index = paddle.randperm(len(data))
     data_mixed = lam * data + (1 - lam) * data[index]
 
     labels_a, labels_b = labels, _index_tensor_by_1dtensor(labels, index)
-    return data_mixed, labels_a, labels_b, lam
+    return data_mixed.astype(original_dtype), labels_a, labels_b, lam
 
 
 def cutmix_data_numpy(data, labels, alpha=0.2, axes=[2, 3]):
