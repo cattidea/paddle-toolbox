@@ -32,7 +32,6 @@ def model_forwards(model, data_shape=(3, 224, 224), batch_size=3):
     return model(paddle.to_tensor(input))
 
 
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_googlenet():
     batch_size = 5
     num_classes = 50
@@ -43,7 +42,6 @@ def test_googlenet():
     assert out2.shape == [batch_size, num_classes]
 
 
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_inception_v3():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -52,7 +50,6 @@ def test_inception_v3():
     assert output.shape == [batch_size, num_classes]
 
 
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_resnext50_32x4d():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -62,7 +59,6 @@ def test_resnext50_32x4d():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_resnext50_64x4d():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -72,7 +68,6 @@ def test_resnext50_64x4d():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_resnext101_32x4d():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -82,7 +77,6 @@ def test_resnext101_32x4d():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_resnext101_64x4d():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -92,7 +86,6 @@ def test_resnext101_64x4d():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_resnext152_32x4d():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -102,7 +95,6 @@ def test_resnext152_32x4d():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_resnext152_64x4d():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -111,7 +103,6 @@ def test_resnext152_64x4d():
     assert output.shape == [batch_size, num_classes]
 
 
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_shufflenet_v2_x0_25():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -121,7 +112,6 @@ def test_shufflenet_v2_x0_25():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_shufflenet_v2_x0_33():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -131,7 +121,6 @@ def test_shufflenet_v2_x0_33():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_shufflenet_v2_x0_5():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -141,7 +130,6 @@ def test_shufflenet_v2_x0_5():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_shufflenet_v2_x1_0():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -151,7 +139,6 @@ def test_shufflenet_v2_x1_0():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_shufflenet_v2_x1_5():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -161,7 +148,6 @@ def test_shufflenet_v2_x1_5():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_shufflenet_v2_x2_0():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -171,7 +157,6 @@ def test_shufflenet_v2_x2_0():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_shufflenet_v2_swish():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -180,7 +165,6 @@ def test_shufflenet_v2_swish():
     assert output.shape == [batch_size, num_classes]
 
 
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_convmixer_768_32():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -190,7 +174,6 @@ def test_convmixer_768_32():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_convmixer_1024_20_ks9_p14():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
@@ -200,7 +183,6 @@ def test_convmixer_1024_20_ks9_p14():
 
 
 @pytest.mark.ci_skip
-@pytest.mark.filterwarnings("ignore:Skip loading for")
 def test_convmixer_1536_20():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)

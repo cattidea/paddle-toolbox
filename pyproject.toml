@@ -14,7 +14,7 @@ python = "^3.7"
 paddlepaddle = { version = "^2.2.0rc0", optional = true, allow-prereleases = true }
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^6.2.5"
 black = "^21.9b0"
 
 [tool.poetry.extras]
@@ -25,6 +25,7 @@ paddle = ["paddlepaddle"]
 
 [tool.pytest.ini_options]
 markers = ["ci_skip", "ci_only"]
+filterwarnings = ["ignore:Skip loading for", "ignore:When training"]
 
 [tool.black]
 line-length = 120
