@@ -6,6 +6,8 @@
 
 ### 使用 pip 安装
 
+注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.2.0rc0 版本
+
 ```bash
 pip install pptb
 ```

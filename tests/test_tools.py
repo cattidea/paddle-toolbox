@@ -35,8 +35,8 @@ class FakeModel(nn.Layer):
 
 @pytest.mark.parametrize("batch_size", [1, 10])
 def test_mixup(batch_size: int):
-    fake_inputs = paddle.to_tensor(np.array(np.random.random((batch_size, 3, 224, 224)), dtype=np.float32))
-    fake_labels = paddle.to_tensor(np.array(np.random.random((batch_size, 1)), dtype=np.int64))
+    fake_inputs = paddle.to_tensor((np.random.random((batch_size, 3, 224, 224)) * 255).astype(np.float32))
+    fake_labels = paddle.to_tensor((np.random.random((batch_size, 1)).astype(np.int64)))
     model = resnext50_32x4d()
     mixup_alpha = 0.2
     loss_function = paddle.nn.CrossEntropyLoss()
@@ -50,6 +50,10 @@ def test_mixup(batch_size: int):
     assert y_batch_a.dtype == y_batch_b.dtype == fake_labels.dtype
     assert X_batch_mixed.shape == fake_inputs.shape
     assert y_batch_a.shape == y_batch_b.shape == fake_labels.shape
+    upper_bound = np.ceil(fake_inputs.numpy().max(axis=0))
+    lower_bound = np.floor(fake_inputs.numpy().min(axis=0))
+    assert (X_batch_mixed.numpy().max(axis=0) <= upper_bound).all()
+    assert (X_batch_mixed.numpy().min(axis=0) >= lower_bound).all()
 
 
 @pytest.mark.parametrize(
@@ -78,6 +82,8 @@ def test_cutmix(batch_size: int, data_shape: Sequence[int], mix_axes: Sequence[i
     assert y_batch_a.dtype == y_batch_b.dtype == fake_labels.dtype
     assert X_batch_mixed.shape == fake_inputs.shape
     assert y_batch_a.shape == y_batch_b.shape == fake_labels.shape
+    keep_ratio = (X_batch_mixed.numpy() == fake_inputs.numpy()).sum().astype(np.float32) / np.prod(fake_inputs.shape)
+    assert keep_ratio >= lam
 
 
 @pytest.mark.parametrize(
