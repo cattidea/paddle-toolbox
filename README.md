@@ -6,7 +6,7 @@
 
 ### 使用 pip 安装
 
-注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.2.0rc0 版本
+注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.2.0 版本
 
 ```bash
 pip install pptb
@@ -146,12 +146,11 @@ for X_batch, y_batch in train_loader():
 
 已支持一些 PaddleClas 下的预训练模型，以及比较新的 ConvMixer
 
--  GoogLeNet
+-  GoogLeNet（已并入 paddle 主线）
 -  Incetpionv3（已并入 paddle 主线）
 -  ResNeXt（已并入 paddle 主线）
--  ShuffleNetV2
+-  ShuffleNetV2（已并入 paddle 主线）
 -  ConvMixer（预训练权重转自 PyTorch）
--  DenseNet (未完整支持)
 
 ```python
 import paddle

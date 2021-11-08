@@ -22,15 +22,15 @@ __all__ = []
 
 model_urls = {
     "convmixer_768_32": (
-        "https://bj.bcebos.com/v1/ai-studio-online/3c594317e9cd464c92cefffc8805709af7c027fee65a448e813e02662281f439?responseContentDisposition=attachment%3B%20filename%3Dconvmixer_768_32_ks7_p7_relu.pdparams",
+        "https://bj.bcebos.com/v1/ai-studio-online/3c594317e9cd464c92cefffc8805709af7c027fee65a448e813e02662281f439",
         "e0812272ad8b994aa169cfd27d93f626",
     ),
     "convmixer_1024_20_ks9_p14": (
-        "https://bj.bcebos.com/v1/ai-studio-online/a645ddcf3c5245218f4caf22bdd41e982f3c34c5d9ff4cada80d3414b1a252c3?responseContentDisposition=attachment%3B%20filename%3Dconvmixer_1024_20_ks9_p14.pdparams",
+        "https://bj.bcebos.com/v1/ai-studio-online/a645ddcf3c5245218f4caf22bdd41e982f3c34c5d9ff4cada80d3414b1a252c3",
         "53462088cb1e55f7a43bc0b9adb9e683",
     ),
     "convmixer_1536_20": (
-        "https://bj.bcebos.com/v1/ai-studio-online/51af9ab6b0fb4627b94433b8b48dc74f8657544e192a472c85d5c92445853ce1?responseContentDisposition=attachment%3B%20filename%3Dconvmixer_1536_20_ks9_p7.pdparams",
+        "https://bj.bcebos.com/v1/ai-studio-online/51af9ab6b0fb4627b94433b8b48dc74f8657544e192a472c85d5c92445853ce1",
         "0442b7e98b873a707de5a8d5419db26d",
     ),
 }

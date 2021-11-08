@@ -60,9 +60,6 @@ from .convmixer import convmixer_768_32
 from .convmixer import convmixer_1024_20_ks9_p14
 from .convmixer import convmixer_1536_20
 
-# DenseNet
-from .densenet import *
-
 __all__ = [
     "GoogLeNet",
     "googlenet",
