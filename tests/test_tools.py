@@ -52,6 +52,7 @@ def test_mixup(batch_size: int):
     assert y_batch_a.shape == y_batch_b.shape == fake_labels.shape
     upper_bound = np.ceil(fake_inputs.numpy().max(axis=0))
     lower_bound = np.floor(fake_inputs.numpy().min(axis=0))
+    # TODO: 这里的测试还是有点问题
     assert (X_batch_mixed.numpy().max(axis=0) <= upper_bound).all()
     assert (X_batch_mixed.numpy().min(axis=0) >= lower_bound).all()
 

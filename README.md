@@ -6,7 +6,7 @@
 
 ### 使用 pip 安装
 
-注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.2.0 版本
+注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.1.2 版本
 
 ```bash
 pip install pptb
@@ -107,7 +107,7 @@ for X_batch, y_batch in train_loader():
 
 除了用于处理 paddle 里 `Tensor` 的 `mixup_data`，还可以使用 `mixup_data_numpy` 处理 numpy 的 ndarray。
 
-#### Cutmix
+#### Cutmix <sup>paddlepaddle=^2.2.0</sup>
 
 和 Mixup 一样，只需要将 `mixup_data` 换为 `cutmix_data` 即可，与 `mixup_data` 不同的是，`cutmix_data` 还接收一个额外参数 `axes` 用于控制需要 mix 的是哪几根 axis，默认 `axes = [2, 3]`，也即 `NCHW` 格式图片数据对应的 `H` 与 `W` 两根 axis。
 

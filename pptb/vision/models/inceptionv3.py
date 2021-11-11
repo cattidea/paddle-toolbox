@@ -21,6 +21,8 @@ from paddle.nn import AdaptiveAvgPool2D, AvgPool2D, BatchNorm, Conv2D, Dropout, 
 from paddle.nn.initializer import Uniform
 from paddle.utils.download import get_weights_path_from_url
 
+from pptb.utils.version_checker import feature_redirect
+
 __all__ = []
 
 model_urls = {
@@ -351,6 +353,7 @@ class InceptionV3(nn.Layer):
         return x
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def inception_v3(pretrained=False, **kwargs):
     """
     InceptionV3 model from

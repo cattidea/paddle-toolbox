@@ -20,6 +20,8 @@ from paddle.nn import AdaptiveAvgPool2D, AvgPool2D, Conv2D, Dropout, Linear, Max
 from paddle.nn.initializer import Uniform
 from paddle.utils.download import get_weights_path_from_url
 
+from pptb.utils.version_checker import feature_redirect
+
 __all__ = []
 
 model_urls = {
@@ -199,6 +201,7 @@ class GoogLeNet(nn.Layer):
         return [out, out1, out2]
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def googlenet(pretrained=False, **kwargs):
     """GoogLeNet (Inception v1) model architecture from
     `"Going Deeper with Convolutions" <https://arxiv.org/pdf/1409.4842.pdf>`_

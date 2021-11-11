@@ -19,6 +19,8 @@ from paddle.nn import AdaptiveAvgPool2D, BatchNorm, Conv2D, Layer, Linear, MaxPo
 from paddle.nn.initializer import KaimingNormal
 from paddle.utils.download import get_weights_path_from_url
 
+from pptb.utils.version_checker import feature_redirect
+
 __all__ = []
 
 model_urls = {
@@ -313,6 +315,7 @@ def _shufflenet_v2(arch, pretrained=False, **kwargs):
     return model
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def shufflenet_v2_x0_25(pretrained=False, **kwargs):
     """ShuffleNetV2 with 0.25x output channels, as described in
     `"ShuffleNet V2: Practical Guidelines for Ecient CNN Architecture Design" <https://arxiv.org/pdf/1807.11164.pdf>`_ 。
@@ -337,6 +340,7 @@ def shufflenet_v2_x0_25(pretrained=False, **kwargs):
     return model
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def shufflenet_v2_x0_33(pretrained=False, **kwargs):
     """ShuffleNetV2 with 0.33x output channels, as described in
     `"ShuffleNet V2: Practical Guidelines for Ecient CNN Architecture Design" <https://arxiv.org/pdf/1807.11164.pdf>`_ 。
@@ -360,6 +364,7 @@ def shufflenet_v2_x0_33(pretrained=False, **kwargs):
     return model
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def shufflenet_v2_x0_5(pretrained=False, **kwargs):
     """ShuffleNetV2 with 0.5x output channels, as described in
     `"ShuffleNet V2: Practical Guidelines for Ecient CNN Architecture Design" <https://arxiv.org/pdf/1807.11164.pdf>`_ 。
@@ -383,6 +388,7 @@ def shufflenet_v2_x0_5(pretrained=False, **kwargs):
     return model
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def shufflenet_v2_x1_0(pretrained=False, **kwargs):
     """ShuffleNetV2 with 1.0x output channels, as described in
     `"ShuffleNet V2: Practical Guidelines for Ecient CNN Architecture Design" <https://arxiv.org/pdf/1807.11164.pdf>`_ 。
@@ -406,6 +412,7 @@ def shufflenet_v2_x1_0(pretrained=False, **kwargs):
     return model
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def shufflenet_v2_x1_5(pretrained=False, **kwargs):
     """ShuffleNetV2 with 1.5x output channels, as described in
     `"ShuffleNet V2: Practical Guidelines for Ecient CNN Architecture Design" <https://arxiv.org/pdf/1807.11164.pdf>`_ 。
@@ -429,6 +436,7 @@ def shufflenet_v2_x1_5(pretrained=False, **kwargs):
     return model
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def shufflenet_v2_x2_0(pretrained=False, **kwargs):
     """ShuffleNetV2 with 2.0x output channels, as described in
     `"ShuffleNet V2: Practical Guidelines for Ecient CNN Architecture Design" <https://arxiv.org/pdf/1807.11164.pdf>`_ 。
@@ -452,6 +460,7 @@ def shufflenet_v2_x2_0(pretrained=False, **kwargs):
     return model
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def shufflenet_v2_swish(pretrained=False, **kwargs):
     """ShuffleNetV2 with 1.0x output channels and swish activation function, as described in
     `"ShuffleNet V2: Practical Guidelines for Ecient CNN Architecture Design" <https://arxiv.org/pdf/1807.11164.pdf>`_ 。

@@ -22,6 +22,8 @@ from paddle.nn import AdaptiveAvgPool2D, BatchNorm, Conv2D, Linear, MaxPool2D
 from paddle.nn.initializer import Uniform
 from paddle.utils.download import get_weights_path_from_url
 
+from pptb.utils.version_checker import feature_redirect
+
 __all__ = []
 
 model_urls = {
@@ -216,6 +218,7 @@ def _resnext(arch, depth, cardinality, pretrained, **kwargs):
     return model
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def resnext50_32x4d(pretrained=False, **kwargs):
     """ResNeXt-50 32x4d model from
     `"Aggregated Residual Transformations for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_
@@ -238,6 +241,7 @@ def resnext50_32x4d(pretrained=False, **kwargs):
     return _resnext("resnext50_32x4d", 50, 32, pretrained, **kwargs)
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def resnext50_64x4d(pretrained=False, **kwargs):
     """ResNeXt-50 64x4d model from
     `"Aggregated Residual Transformations for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_
@@ -260,6 +264,7 @@ def resnext50_64x4d(pretrained=False, **kwargs):
     return _resnext("resnext50_64x4d", 50, 64, pretrained, **kwargs)
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def resnext101_32x4d(pretrained=False, **kwargs):
     """ResNeXt-101 32x4d model from
     `"Aggregated Residual Transformations for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_
@@ -282,6 +287,7 @@ def resnext101_32x4d(pretrained=False, **kwargs):
     return _resnext("resnext101_32x4d", 101, 32, pretrained, **kwargs)
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def resnext101_64x4d(pretrained=False, **kwargs):
     """ResNeXt-101 64x4d model from
     `"Aggregated Residual Transformations for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_
@@ -304,6 +310,7 @@ def resnext101_64x4d(pretrained=False, **kwargs):
     return _resnext("resnext101_64x4d", 101, 64, pretrained, **kwargs)
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def resnext152_32x4d(pretrained=False, **kwargs):
     """ResNeXt-152 32x4d model from
     `"Aggregated Residual Transformations for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_
@@ -326,6 +333,7 @@ def resnext152_32x4d(pretrained=False, **kwargs):
     return _resnext("resnext152_32x4d", 152, 32, pretrained, **kwargs)
 
 
+@feature_redirect("2.3.0", "paddle.vision.models")
 def resnext152_64x4d(pretrained=False, **kwargs):
     """ResNeXt-152 64x4d model from
     `"Aggregated Residual Transformations for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_
