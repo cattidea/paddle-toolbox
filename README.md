@@ -9,14 +9,10 @@
 注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.1.2 版本
 
 ```bash
-pip install pptb
-```
-
-由于仍处于开发阶段，API 较为不稳定，建议安装时指定版本号
-
-```bash
 pip install pptb==0.1.8
 ```
+
+由于仍处于开发阶段，API 较为不稳定，安装时请**一定要指定版本号**
 
 ### 直接从 GitHub 拉取最新代码
 
@@ -187,3 +183,4 @@ PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很�
 
 -  [PaddlePaddle](https://github.com/PaddlePaddle/Paddle)
 -  [Torch Toolbox](https://github.com/PistonY/torch-toolbox)
+-  [pytorch-image-models](https://github.com/rwightman/pytorch-image-models)
