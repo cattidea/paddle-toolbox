@@ -9,7 +9,7 @@
 注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.1.2 版本
 
 ```bash
-pip install pptb==0.1.8
+pip install pptb==0.1.9-a1
 ```
 
 由于仍处于开发阶段，API 较为不稳定，安装时请**一定要指定版本号**
