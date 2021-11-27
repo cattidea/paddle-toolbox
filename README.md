@@ -12,7 +12,7 @@
 pip install pptb==0.1.9-alpha.1
 ```
 
-由于仍处于开发阶段，API 较为不稳定，安装时请**一定要指定版本号**
+由于仍处于早期开发阶段，API 较为不稳定，安装时请**一定要指定版本号**
 
 ### 直接从 GitHub 拉取最新代码
 
@@ -175,12 +175,11 @@ PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很�
 
 -  [x] Cutmix
 -  [ ] Activation、Mish
--  [ ] ~~Lookahead (paddle.incubate.LookAhead 已经有了)~~
 -  [ ] 更多 vision models
    -  [ ] MobileNetV3
    -  [ ] Xception
    -  [ ] Swin Transformer
-   -  [ ] DenseNet（完整支持）
+   -  [ ] CvT
 -  [ ] 完整的单元测试
 
 ## References
