@@ -9,7 +9,7 @@
 注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.1.2 版本
 
 ```bash
-pip install pptb==0.1.9-a1
+pip install pptb==0.1.9-alpha.1
 ```
 
 由于仍处于开发阶段，API 较为不稳定，安装时请**一定要指定版本号**
@@ -38,14 +38,18 @@ sys.path.append('/home/aistudio/work/paddle-toolbox/')
 
 ```python
 import paddle
-from pptb.nn import LabelSmoothingLoss
+from pptb.nn import LabelSmoothingLoss, LabelSmoothingCrossEntropyLoss
 
-num_classes = 40
 label_smooth_epision = 0.1
 
+loss_function = paddle.nn.CrossEntropyLoss()
 # 如果需要标签平滑后 Loss，将下面这行替换成后面那一行即可
-# loss_function = paddle.nn.CrossEntropyLoss()
-loss_function = LabelSmoothingLoss(paddle.nn.CrossEntropyLoss(soft_label=True), num_classes, label_smooth_epision)
+loss_function = LabelSmoothingLoss(
+   paddle.nn.CrossEntropyLoss(soft_label=True),
+   label_smooth_epision
+)
+# 由于 CrossEntropyLoss 的 LabelSmoothing 比较常用，因此也可以使用下面这个别名
+loss_function = LabelSmoothingCrossEntropyLoss(label_smooth_epision)
 ```
 
 ### CosineWarmup
