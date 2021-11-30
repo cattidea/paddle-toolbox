@@ -175,6 +175,8 @@ PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很�
 
 -  [x] Cutmix
 -  [ ] Activation、Mish
+-  [ ] RandomErasing
+-  [ ] AutoAugment
 -  [ ] 更多 vision models
    -  [ ] MobileNetV3
    -  [ ] Xception
