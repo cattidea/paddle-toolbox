@@ -1,6 +1,8 @@
-# Paddle Toolbox [WIP]
+# Paddle Toolbox [Early WIP]
 
 一些方便的小工具，参考 Paddle 的 API 设计以及 Torch Toolbox API 设计
+
+:warning: 目前正处于早期设计阶段，大多数功能的开发方案尚处于草案阶段～
 
 ## 安装
 
@@ -12,7 +14,7 @@
 pip install pptb==0.1.9-alpha.1
 ```
 
-由于仍处于早期开发阶段，API 较为不稳定，安装时请**一定要指定版本号**
+由于仍处于早期开发设计阶段，API 较为不稳定，安装时请**一定要指定版本号**
 
 ### 直接从 GitHub 拉取最新代码
 
@@ -176,7 +178,8 @@ PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很�
 -  [x] Cutmix
 -  [ ] Activation、Mish
 -  [ ] RandomErasing
--  [ ] AutoAugment
+-  [ ] AutoAugment、RandAugment
+-  [ ] Transform Layer（使用 Layer 实现某些 Transform）
 -  [ ] 更多 vision models
    -  [ ] MobileNetV3
    -  [ ] Xception
