@@ -1,3 +1,17 @@
+# Copyright (c) 2021 PaddlePaddle Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -10,43 +24,43 @@ from paddle.regularizer import L2Decay
 from paddle.utils.download import get_weights_path_from_url
 
 model_urls = {
-    "mobilenet_v3_small_x0_35": (
+    "mobilenet_v3_small_x0.35": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV3_small_x0_35_pretrained.pdparams",
         "938f11e720fdd04fe46a68322155f7e3",
     ),
-    "mobilenet_v3_small_x0_5": (
+    "mobilenet_v3_small_x0.5": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV3_small_x0_5_pretrained.pdparams",
         "4ccb3f48b940edacdf37e227c2b77ac2",
     ),
-    "mobilenet_v3_small_x0_75": (
+    "mobilenet_v3_small_x0.75": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV3_small_x0_75_pretrained.pdparams",
         "ea999201351e094d3e71c3c00584098d",
     ),
-    "mobilenet_v3_small_x1_0": (
+    "mobilenet_v3_small_x1.0": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV3_small_x1_0_pretrained.pdparams",
         "96d99be8a67d6431ba7de6149f15b23d",
     ),
-    "mobilenet_v3_small_x1_25": (
+    "mobilenet_v3_small_x1.25": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV3_small_x1_25_pretrained.pdparams",
         "69b75ae25115475af20d0f1af67412c0",
     ),
-    "mobilenet_v3_large_x0_35": (
+    "mobilenet_v3_large_x0.35": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV3_large_x0_35_pretrained.pdparams",
         "64864e5bff400eca62566c32270f7afc",
     ),
-    "mobilenet_v3_large_x0_5": (
+    "mobilenet_v3_large_x0.5": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV3_large_x0_5_pretrained.pdparams",
         "d6da6f4fb5d27901be64c7acc26288d0",
     ),
-    "mobilenet_v3_large_x0_75": (
+    "mobilenet_v3_large_x0.75": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV3_large_x0_75_pretrained.pdparams",
         "5af6995c37d468d8e3ddee69cc238ed7",
     ),
-    "mobilenet_v3_large_x1_0": (
+    "mobilenet_v3_large_x1.0": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV3_large_x1_0_pretrained.pdparams",
         "8f8b4359af8093191628e410438ca858",
     ),
-    "mobilenet_v3_large_x1_25": (
+    "mobilenet_v3_large_x1.25": (
         "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV3_large_x1_25_pretrained.pdparams",
         "0a092f2906ef0ae8267e4756449cc90a",
     ),
@@ -292,7 +306,7 @@ class MobileNetV3Small(MobileNetV3):
     `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
 
     Args:
-        scale (float, optional): scale of output channels. Default: 1.0.
+        scale (float, optional): scale of channels in each layer. Default: 1.0.
         last_channel (int, optional): The number of channels on the penultimate layer. Default: 1280.
         num_classes (int, optional): output dim of last fc layer. If num_classes <=0, last fc layer
                             will not be defined. Default: 1000.
@@ -315,8 +329,8 @@ class MobileNetV3Small(MobileNetV3):
 
     def __init__(
         self,
-        last_channel=1280,
         scale=1.0,
+        last_channel=1280,
         num_classes=1000,
         with_pool=True,
     ):
@@ -341,7 +355,7 @@ class MobileNetV3Large(MobileNetV3):
     `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
 
     Args:
-        scale (float, optional): scale of output channels. Default: 1.0.
+        scale (float, optional): scale of channels in each layer. Default: 1.0.
         last_channel (int, optional): The number of channels on the penultimate layer. Default: 1280.
         num_classes (int, optional): output dim of last fc layer. If num_classes <=0, last fc layer
                             will not be defined. Default: 1000.
@@ -364,8 +378,8 @@ class MobileNetV3Large(MobileNetV3):
 
     def __init__(
         self,
-        last_channel=1280,
         scale=1.0,
+        last_channel=1280,
         num_classes=1000,
         with_pool=True,
     ):
@@ -389,12 +403,13 @@ class MobileNetV3Large(MobileNetV3):
         super().__init__(config, scale=scale, last_channel=last_channel, with_pool=with_pool, num_classes=num_classes)
 
 
-def _MobileNetV3(arch, pretrained=False, **kwargs):
-    if arch.startswith("mobilenet_v3_large"):
-        model = MobileNetV3Large(**kwargs)
+def _mobilenet_v3(arch, pretrained=False, scale=1.0, **kwargs):
+    if arch == "mobilenet_v3_large":
+        model = MobileNetV3Large(scale=scale, **kwargs)
     else:
-        model = MobileNetV3Small(**kwargs)
+        model = MobileNetV3Small(scale=scale, **kwargs)
     if pretrained:
+        arch = "{}_x{}".format(arch, scale)
         assert (
             arch in model_urls
         ), "{} model do not have a pretrained model now, you should set pretrained=False".format(arch)
@@ -405,24 +420,25 @@ def _MobileNetV3(arch, pretrained=False, **kwargs):
     return model
 
 
-def mobilenet_v3_large_x0_35(pretrained=False, **kwargs):
-    """MobileNetV3 Large architecture model with 0.35 scale from
+def mobilenet_v3_small(pretrained=False, scale=1.0, **kwargs):
+    """MobileNetV3 Small architecture model from
     `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
 
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet. Default: False.
+        scale (float, optional): scale of channels in each layer. Default: 1.0.
 
     Examples:
         .. code-block:: python
 
             import paddle
-            from paddle.vision.models import mobilenet_v3_large_x0_35
+            from paddle.vision.models import mobilenet_v3_small
 
             # build model
-            model = mobilenet_v3_large_x0_35()
+            model = mobilenet_v3_small(scale=0.35)
 
             # build model and load imagenet pretrained weight
-            # model = mobilenet_v3_large_x0_35(pretrained=True)
+            # model = mobilenet_v3_small_x0_35(scale=0.35, pretrained=True)
 
             x = paddle.rand([1, 3, 224, 224])
             out = model(x)
@@ -430,28 +446,29 @@ def mobilenet_v3_large_x0_35(pretrained=False, **kwargs):
             print(out.shape)
 
     """
-    model = _MobileNetV3("mobilenet_v3_large_x0_35", scale=0.35, pretrained=pretrained, **kwargs)
+    model = _mobilenet_v3("mobilenet_v3_small", scale=scale, pretrained=pretrained, **kwargs)
     return model
 
 
-def mobilenet_v3_large_x0_5(pretrained=False, **kwargs):
-    """MobileNetV3 Large architecture model with 0.35 scale from
+def mobilenet_v3_large(pretrained=False, scale=1.0, **kwargs):
+    """MobileNetV3 Large architecture model from
     `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
 
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet. Default: False.
+        scale (float, optional): scale of channels in each layer. Default: 1.0.
 
     Examples:
         .. code-block:: python
 
             import paddle
-            from paddle.vision.models import mobilenet_v3_large_x0_5
+            from paddle.vision.models import mobilenet_v3_large
 
             # build model
-            model = mobilenet_v3_large_x0_5()
+            model = mobilenet_v3_large(scale=0.35)
 
             # build model and load imagenet pretrained weight
-            # model = mobilenet_v3_large_x0_5(pretrained=True)
+            # model = mobilenet_v3_large(scale=0.35, pretrained=True)
 
             x = paddle.rand([1, 3, 224, 224])
             out = model(x)
@@ -459,237 +476,5 @@ def mobilenet_v3_large_x0_5(pretrained=False, **kwargs):
             print(out.shape)
 
     """
-    model = _MobileNetV3("mobilenet_v3_large_x0_5", scale=0.5, pretrained=pretrained, **kwargs)
-    return model
-
-
-def mobilenet_v3_large_x0_75(pretrained=False, **kwargs):
-    """MobileNetV3 Large architecture model with 0.35 scale from
-    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet. Default: False.
-
-    Examples:
-        .. code-block:: python
-
-            import paddle
-            from paddle.vision.models import mobilenet_v3_large_x0_75
-
-            # build model
-            model = mobilenet_v3_large_x0_75()
-
-            # build model and load imagenet pretrained weight
-            # model = mobilenet_v3_large_x0_75(pretrained=True)
-
-            x = paddle.rand([1, 3, 224, 224])
-            out = model(x)
-
-            print(out.shape)
-
-    """
-    model = _MobileNetV3("mobilenet_v3_large_x0_75", scale=0.75, pretrained=pretrained, **kwargs)
-    return model
-
-
-def mobilenet_v3_large_x1_0(pretrained=False, **kwargs):
-    """MobileNetV3 Large architecture model with 0.35 scale from
-    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet. Default: False.
-
-    Examples:
-        .. code-block:: python
-
-            import paddle
-            from paddle.vision.models import mobilenet_v3_large_x1_0
-
-            # build model
-            model = mobilenet_v3_large_x1_0()
-
-            # build model and load imagenet pretrained weight
-            # model = mobilenet_v3_large_x1_0(pretrained=True)
-
-            x = paddle.rand([1, 3, 224, 224])
-            out = model(x)
-
-            print(out.shape)
-
-    """
-    model = _MobileNetV3("mobilenet_v3_large_x1_0", scale=1.0, pretrained=pretrained, **kwargs)
-    return model
-
-
-def mobilenet_v3_large_x1_25(pretrained=False, **kwargs):
-    """MobileNetV3 Large architecture model with 0.35 scale from
-    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet. Default: False.
-
-    Examples:
-        .. code-block:: python
-
-            import paddle
-            from paddle.vision.models import mobilenet_v3_large_x1_25
-
-            # build model
-            model = mobilenet_v3_large_x1_25()
-
-            # build model and load imagenet pretrained weight
-            # model = mobilenet_v3_large_x1_25(pretrained=True)
-
-            x = paddle.rand([1, 3, 224, 224])
-            out = model(x)
-
-            print(out.shape)
-
-    """
-    model = _MobileNetV3("mobilenet_v3_large_x1_25", scale=1.25, pretrained=pretrained, **kwargs)
-    return model
-
-
-def mobilenet_v3_small_x0_35(pretrained=False, **kwargs):
-    """MobileNetV3 Small architecture model with 0.35 scale from
-    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet. Default: False.
-
-    Examples:
-        .. code-block:: python
-
-            import paddle
-            from paddle.vision.models import mobilenet_v3_small_x0_35
-
-            # build model
-            model = mobilenet_v3_small_x0_35()
-
-            # build model and load imagenet pretrained weight
-            # model = mobilenet_v3_small_x0_35(pretrained=True)
-
-            x = paddle.rand([1, 3, 224, 224])
-            out = model(x)
-
-            print(out.shape)
-
-    """
-    model = _MobileNetV3("mobilenet_v3_small_x0_35", scale=0.35, pretrained=pretrained, **kwargs)
-    return model
-
-
-def mobilenet_v3_small_x0_5(pretrained=False, **kwargs):
-    """MobileNetV3 Small architecture model with 0.5 scale from
-    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet. Default: False.
-
-    Examples:
-        .. code-block:: python
-
-            import paddle
-            from paddle.vision.models import mobilenet_v3_small_x0_5
-
-            # build model
-            model = mobilenet_v3_small_x0_5()
-
-            # build model and load imagenet pretrained weight
-            # model = mobilenet_v3_small_x0_5(pretrained=True)
-
-            x = paddle.rand([1, 3, 224, 224])
-            out = model(x)
-
-            print(out.shape)
-
-    """
-    model = _MobileNetV3("mobilenet_v3_small_x0_5", scale=0.5, pretrained=pretrained, **kwargs)
-    return model
-
-
-def mobilenet_v3_small_x0_75(pretrained=False, **kwargs):
-    """MobileNetV3 Small architecture model with 0.75 scale from
-    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet. Default: False.
-
-    Examples:
-        .. code-block:: python
-
-            import paddle
-            from paddle.vision.models import mobilenet_v3_small_x0_75
-
-            # build model
-            model = mobilenet_v3_small_x0_75()
-
-            # build model and load imagenet pretrained weight
-            # model = mobilenet_v3_small_x0_75(pretrained=True)
-
-            x = paddle.rand([1, 3, 224, 224])
-            out = model(x)
-
-            print(out.shape)
-
-    """
-    model = _MobileNetV3("mobilenet_v3_small_x0_75", scale=0.75, pretrained=pretrained, **kwargs)
-    return model
-
-
-def mobilenet_v3_small_x1_0(pretrained=False, **kwargs):
-    """MobileNetV3 Small architecture model with 1.0 scale from
-    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet. Default: False.
-
-    Examples:
-        .. code-block:: python
-
-            import paddle
-            from paddle.vision.models import mobilenet_v3_small_x1_0
-
-            # build model
-            model = mobilenet_v3_small_x1_0()
-
-            # build model and load imagenet pretrained weight
-            # model = mobilenet_v3_small_x1_0(pretrained=True)
-
-            x = paddle.rand([1, 3, 224, 224])
-            out = model(x)
-
-            print(out.shape)
-
-    """
-    model = _MobileNetV3("mobilenet_v3_small_x1_0", scale=1.0, pretrained=pretrained, **kwargs)
-    return model
-
-
-def mobilenet_v3_small_x1_25(pretrained=False, **kwargs):
-    """MobileNetV3 Small architecture model with 1.25 scale from
-    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet. Default: False.
-
-    Examples:
-        .. code-block:: python
-
-            import paddle
-            from paddle.vision.models import mobilenet_v3_small_x1_25
-
-            # build model
-            model = mobilenet_v3_small_x1_25()
-
-            # build model and load imagenet pretrained weight
-            # model = mobilenet_v3_small_x1_25(pretrained=True)
-
-            x = paddle.rand([1, 3, 224, 224])
-            out = model(x)
-
-            print(out.shape)
-
-    """
-    model = _MobileNetV3("mobilenet_v3_small_x1_25", scale=1.25, pretrained=pretrained, **kwargs)
+    model = _mobilenet_v3("mobilenet_v3_large", scale=scale, pretrained=pretrained, **kwargs)
     return model
