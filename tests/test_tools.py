@@ -14,7 +14,6 @@ from pptb.tools import (
     mixup_data,
     mixup_metric,
 )
-from pptb.vision.models import resnext50_32x4d
 
 
 class FakeModel(nn.Layer):
@@ -37,12 +36,14 @@ class FakeModel(nn.Layer):
 def test_mixup(batch_size: int):
     fake_inputs = paddle.to_tensor((np.random.random((batch_size, 3, 224, 224)) * 255).astype(np.float32))
     fake_labels = paddle.to_tensor((np.random.random((batch_size, 1)).astype(np.int64)))
-    model = resnext50_32x4d()
+    model = FakeModel((3, 224, 224), (1000,))
     mixup_alpha = 0.2
     loss_function = paddle.nn.CrossEntropyLoss()
 
     X_batch_mixed, y_batch_a, y_batch_b, lam = mixup_data(fake_inputs, fake_labels, mixup_alpha)
-    predicts = model(X_batch_mixed)
+    model.eval()
+    with paddle.no_grad():
+        predicts = model(X_batch_mixed)
     loss = mixup_criterion(loss_function, predicts, y_batch_a, y_batch_b, lam)
     acc = mixup_metric(paddle.metric.accuracy, predicts, y_batch_a, y_batch_b, lam)
 
@@ -75,7 +76,9 @@ def test_cutmix(batch_size: int, data_shape: Sequence[int], mix_axes: Sequence[i
     loss_function = paddle.nn.CrossEntropyLoss()
 
     X_batch_mixed, y_batch_a, y_batch_b, lam = cutmix_data(fake_inputs, fake_labels, cutmix_alpha, axes=mix_axes)
-    predicts = model(X_batch_mixed)
+    model.eval()
+    with paddle.no_grad():
+        predicts = model(X_batch_mixed)
     loss = cutmix_criterion(loss_function, predicts, y_batch_a, y_batch_b, lam)
     acc = cutmix_metric(paddle.metric.accuracy, predicts, y_batch_a, y_batch_b, lam)
 
@@ -127,7 +130,9 @@ def test_mixing_data_controller(is_numpy: bool, mixup_prob: float, cutmix_prob: 
         y_batch_a = paddle.to_tensor(y_batch_a)
         y_batch_b = paddle.to_tensor(y_batch_b)
 
-    predicts = model(X_batch_mixed)
+    model.eval()
+    with paddle.no_grad():
+        predicts = model(X_batch_mixed)
     loss = mixing_data_controller.loss(predicts, y_batch_a, y_batch_b, lam)
     acc = mixing_data_controller.metric(predicts, y_batch_a, y_batch_b, lam)
 

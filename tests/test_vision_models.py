@@ -21,6 +21,10 @@ from pptb.vision.models import (
     shufflenet_v2_swish,
 )
 from pptb.vision.models import (
+    mobilenet_v3_small,
+    mobilenet_v3_large,
+)
+from pptb.vision.models import (
     convmixer_768_32,
     convmixer_1024_20_ks9_p14,
     convmixer_1536_20,
@@ -28,8 +32,10 @@ from pptb.vision.models import (
 
 
 def model_forwards(model, data_shape=(3, 224, 224), batch_size=3):
+    model.eval()
     input = np.array(np.random.random((batch_size, *data_shape)), dtype=np.float32)
-    return model(paddle.to_tensor(input))
+    with paddle.no_grad():
+        return model(paddle.to_tensor(input))
 
 
 def test_googlenet():
@@ -161,6 +167,44 @@ def test_shufflenet_v2_swish():
     batch_size = 2 ** np.random.randint(3, 5)
     num_classes = np.random.randint(10, 1000)
     model = shufflenet_v2_swish(num_classes=num_classes)
+    output = model_forwards(model, data_shape=(3, 224, 224), batch_size=batch_size)
+    assert output.shape == [batch_size, num_classes]
+
+
+@pytest.mark.parametrize("scale", [0.35])
+def test_mobilenet_v3_small_pretrained(scale):
+    batch_size = 2 ** np.random.randint(3, 5)
+    num_classes = np.random.randint(10, 1000)
+    model = mobilenet_v3_small(scale=scale, pretrained=True, num_classes=num_classes)
+    output = model_forwards(model, data_shape=(3, 224, 224), batch_size=batch_size)
+    assert output.shape == [batch_size, num_classes]
+
+
+@pytest.mark.ci_skip
+@pytest.mark.parametrize("scale", [0.5, 0.75, 1.0, 1.25])
+def test_mobilenet_v3_small(scale):
+    batch_size = 2 ** np.random.randint(3, 5)
+    num_classes = np.random.randint(10, 1000)
+    model = mobilenet_v3_small(scale=scale, num_classes=num_classes)
+    output = model_forwards(model, data_shape=(3, 224, 224), batch_size=batch_size)
+    assert output.shape == [batch_size, num_classes]
+
+
+@pytest.mark.parametrize("scale", [0.35])
+def test_mobilenet_v3_large_pretrained(scale):
+    batch_size = 2 ** np.random.randint(3, 5)
+    num_classes = np.random.randint(10, 1000)
+    model = mobilenet_v3_large(scale=scale, pretrained=True, num_classes=num_classes)
+    output = model_forwards(model, data_shape=(3, 224, 224), batch_size=batch_size)
+    assert output.shape == [batch_size, num_classes]
+
+
+@pytest.mark.ci_skip
+@pytest.mark.parametrize("scale", [0.5, 0.75, 1.0, 1.25])
+def test_mobilenet_v3_large(scale):
+    batch_size = 2 ** np.random.randint(3, 5)
+    num_classes = np.random.randint(10, 1000)
+    model = mobilenet_v3_large(scale=scale, num_classes=num_classes)
     output = model_forwards(model, data_shape=(3, 224, 224), batch_size=batch_size)
     assert output.shape == [batch_size, num_classes]
 

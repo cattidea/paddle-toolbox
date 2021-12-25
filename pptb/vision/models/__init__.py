@@ -28,16 +28,8 @@ from .shufflenetv2 import shufflenet_v2_swish
 # MobileNetV3
 from .mobilenetv3 import MobileNetV3Small
 from .mobilenetv3 import MobileNetV3Large
-from .mobilenetv3 import mobilenet_v3_small_x0_35
-from .mobilenetv3 import mobilenet_v3_small_x0_5
-from .mobilenetv3 import mobilenet_v3_small_x0_75
-from .mobilenetv3 import mobilenet_v3_small_x1_0
-from .mobilenetv3 import mobilenet_v3_small_x1_25
-from .mobilenetv3 import mobilenet_v3_large_x0_35
-from .mobilenetv3 import mobilenet_v3_large_x0_5
-from .mobilenetv3 import mobilenet_v3_large_x0_75
-from .mobilenetv3 import mobilenet_v3_large_x1_0
-from .mobilenetv3 import mobilenet_v3_large_x1_25
+from .mobilenetv3 import mobilenet_v3_small
+from .mobilenetv3 import mobilenet_v3_large
 
 # ConvMixer
 from .convmixer import ConvMixer
@@ -67,16 +59,8 @@ __all__ = [
     "shufflenet_v2_swish",
     "MobileNetV3Small",
     "MobileNetV3Large",
-    "mobilenet_v3_small_x0_35",
-    "mobilenet_v3_small_x0_5",
-    "mobilenet_v3_small_x0_75",
-    "mobilenet_v3_small_x1_0",
-    "mobilenet_v3_small_x1_25",
-    "mobilenet_v3_large_x0_35",
-    "mobilenet_v3_large_x0_5",
-    "mobilenet_v3_large_x0_75",
-    "mobilenet_v3_large_x1_0",
-    "mobilenet_v3_large_x1_25",
+    "mobilenet_v3_small",
+    "mobilenet_v3_large",
     "ConvMixer",
     "convmixer_768_32",
     "convmixer_1024_20_ks9_p14",
