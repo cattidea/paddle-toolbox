@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pptb"
-version = "0.1.9-alpha.1"
+version = "0.2.0-alpha.1"
 description = "🚣 一些常用的但 paddle 里没有的小工具～"
 authors = ["Nyakku Shigure <sigure.qaq@gmail.com>"]
 license = "MIT"
