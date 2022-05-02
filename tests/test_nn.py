@@ -1,7 +1,7 @@
 import numpy as np
 import paddle
 
-from pptb.nn import LabelSmoothingLoss, DropPath
+from pptb.nn import DropPath, LabelSmoothingLoss
 
 
 def test_label_smoothing_loss():

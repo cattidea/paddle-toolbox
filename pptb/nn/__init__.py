@@ -1,2 +1,2 @@
-from .loss import *
 from .layer import *
+from .loss import *

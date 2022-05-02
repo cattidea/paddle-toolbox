@@ -4,8 +4,6 @@ from typing import Tuple
 import numpy as np
 import paddle
 
-from ..utils.version_checker import minimum_required_version
-
 
 def _cutmix_on_one_axis(size: int, ratio: float) -> Tuple[int, int]:
     cut_size = int(size * ratio)
@@ -65,7 +63,6 @@ def cutmix_data_numpy(data, labels, alpha=0.2, axes=[2, 3]):
     return data_mixed, labels_a, labels_b, lam
 
 
-@minimum_required_version("2.2.0")
 def cutmix_data(data, labels, alpha=0.2, axes=[2, 3]):
     assert 0 not in axes, "batch 轴不应进行 cutmix"
 

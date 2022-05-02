@@ -8,7 +8,7 @@
 
 ### 使用 pip 安装
 
-注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.1.2 版本
+注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.3.0rc0 版本（会跟随 paddle 版本变化）
 
 ```bash
 pip install pptb==0.1.9-alpha.1
@@ -109,7 +109,7 @@ for X_batch, y_batch in train_loader():
 
 除了用于处理 paddle 里 `Tensor` 的 `mixup_data`，还可以使用 `mixup_data_numpy` 处理 numpy 的 ndarray。
 
-#### Cutmix <sup>paddlepaddle=^2.2.0</sup>
+#### Cutmix
 
 和 Mixup 一样，只需要将 `mixup_data` 换为 `cutmix_data` 即可，与 `mixup_data` 不同的是，`cutmix_data` 还接收一个额外参数 `axes` 用于控制需要 mix 的是哪几根 axis，默认 `axes = [2, 3]`，也即 `NCHW` 格式图片数据对应的 `H` 与 `W` 两根 axis。
 
@@ -146,19 +146,22 @@ for X_batch, y_batch in train_loader():
 
 提供更加丰富的 backbone，所有模型均会提供预训练权重
 
+合入 paddle 主线的模型会在新版本发布时移除，避免 API 不同步导致的问题
+
 已支持一些 PaddleClas 下的预训练模型，以及比较新的 ConvMixer
 
--  GoogLeNet（已并入 paddle 主线）
--  Incetpionv3（已并入 paddle 主线）
--  ResNeXt（已并入 paddle 主线）
--  ShuffleNetV2（已并入 paddle 主线）
+-  GoogLeNet（已并入 paddle 主线且已移除，请直接使用 paddle.vision.models.GoogLeNet）
+-  Incetpionv3（已并入 paddle 主线且已移除，请直接使用 paddle.vision.models.InceptionV3）
+-  ResNeXt（已并入 paddle 主线且已移除，请直接使用 paddle.vision.models.ResNet）
+-  ShuffleNetV2（已并入 paddle 主线且已移除，请直接使用 paddle.vision.models.ShuffleNetV2）
+-  MobileNetV3（已并入 paddle 主线且已移除，请直接使用 paddle.vision.models.MobileNetV3Large 和 paddle.vision.models.MobileNetV3Small）
 -  ConvMixer（预训练权重转自 PyTorch）
 
 ```python
 import paddle
 import pptb.vision.models as ppmodels
 
-model = ppmodels.resnext50_32x4d(pretrained=True)
+model = ppmodels.convmixer_768_32(pretrained=True)
 ```
 
 PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很多比较新的模型的 [ppim](https://github.com/AgentMaker/Paddle-Image-Models)~
@@ -181,7 +184,6 @@ PS: 如果这些模型无法满足你的需求的话，可以试试囊括了很�
 -  [ ] AutoAugment、RandAugment
 -  [ ] Transform Layer（使用 Layer 实现某些 Transform）
 -  [ ] 更多 vision models
-   -  [ ] MobileNetV3
    -  [ ] Xception
    -  [ ] Swin Transformer
    -  [ ] CvT

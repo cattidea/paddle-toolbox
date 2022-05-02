@@ -11,11 +11,12 @@ keywords = ["python", "paddle", "toolbox"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-paddlepaddle = { version = "^2.2.0", optional = true, allow-prereleases = true }
+paddlepaddle = { version = "^2.3.0rc0", optional = true, allow-prereleases = true }
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
 black = "^21.9b0"
+pytest = "^7.1.2"
+isort = "^5.10.1"
 
 [tool.poetry.extras]
 paddle = ["paddlepaddle"]
@@ -29,6 +30,9 @@ filterwarnings = ["ignore:Skip loading for", "ignore:When training"]
 
 [tool.black]
 line-length = 120
+
+[tool.isort]
+profile = "black"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
