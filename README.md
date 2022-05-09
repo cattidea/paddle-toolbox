@@ -8,10 +8,10 @@
 
 ### 使用 pip 安装
 
-注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.3.0rc0 版本（会跟随 paddle 版本变化）
+注意：Python 需至少 3.7.0 版本，PaddlePaddle 需至少 2.3.0 版本（会跟随 paddle 版本变化）
 
 ```bash
-pip install pptb==0.2.0-alpha.1
+pip install pptb==0.2.0
 ```
 
 由于仍处于早期开发设计阶段，API 较为不稳定，安装时请**一定要指定版本号**
